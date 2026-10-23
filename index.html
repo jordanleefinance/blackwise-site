@@ -205,6 +205,8 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
       <div class="asks-label">Ask BlackWise · pick a question, the phone answers live</div>
       <div class="asks" id="asks">
         <div class="asks-group"><h3>Personal</h3>
+          <button class="ask" data-s="okay">Am I going to be okay?</button>
+          <button class="ask" data-s="friends">Can I go hang out with my friends?</button>
           <button class="ask" data-s="car" aria-pressed="true">Can I afford this car?</button>
           <button class="ask" data-s="loan">When will my student loans be gone?</button>
           <button class="ask" data-s="retire">How much should I save for retirement to lower my taxes?</button>
@@ -463,6 +465,20 @@ const S={
         rows:[["Annual cost",usd(monthly*12)],["Share of $11,000 monthly profit",(share*100).toFixed(0)+"%"],["Profit left each month",usd(profit-monthly)]],
         coach:share<=.4?"You can carry this hire. Keep 3 months of their cost in reserve while they ramp up.":"Consider part-time to start, or raise prices first. Try a lower wage to compare.",
         formula:"monthly cost = wage × 2,080 hrs × 1.12 ÷ 12, compared to average monthly profit"}}},
+  okay:{ws:"P",q:"Am I going to be okay?",label:"Emergency savings",min:0,max:12,step:.5,val:2.5,fmt:v=>v+" months",
+    run(v){const dti=24,rate=8,sScore=Math.min(v/6,1)*40,dScore=dti<=20?30:dti<=36?22:dti<=43?12:4,rScore=Math.min(rate/15,1)*30,score=Math.round(sScore+dScore+rScore);
+      return{big:score+"/100",sub:"BlackWise health score · sample profile",
+        verdict:score>=75?["v-good","You're in good shape"]:score>=55?["v-warn","Okay, with one weak spot"]:["v-bad","Let's build a cushion"],
+        rows:[["Emergency fund",v+" of 6 months"],["Debt-to-income",dti+"%"],["Saving rate",rate+"% of pay"]],
+        coach:v>=6?"Yes. You could cover six months of bills, your debt is manageable, and you save every month.":"You're going to be okay. Your debt is manageable. The one gap is savings: growing it to 6 months would cover a job loss or big repair.",
+        formula:"score = savings (months ÷ 6, max 40) + debt-to-income (max 30) + saving rate (÷ 15%, max 30)"}}},
+  friends:{ws:"P",q:"Can I go hang out with my friends?",label:"What the plan costs",min:0,max:200,step:5,val:45,fmt:usd,
+    run(v){const left=85,days=4,after=left-v;
+      return{big:usd(Math.max(after,0)),sub:"left in your fun money until payday ("+days+" days)",
+        verdict:after>=20?["v-good","Go have fun"]:after>=0?["v-warn","Yes, but that's the week"]:["v-bad","Over this week's budget"],
+        rows:[["Fun money left this week",usd(left)],["This plan",usd(v)],["Bills due before payday","Covered"]],
+        coach:after>=20?"Go. Your bills are covered and you'll still have "+usd(after)+" left for the week.":after>=0?"You can go. It uses most of this week's fun money, so keep the rest of the week low-key.":"This plan is "+usd(-after)+" over. Try a cheaper spot, or wait "+days+" days until payday.",
+        formula:"safe to spend = fun budget left this week − plan cost (bills before payday already set aside)"}}},
   retire:{ws:"P",q:"How much should I save for retirement to lower my taxes?",label:"401(k) per year",min:0,max:24500,step:500,val:6000,fmt:usd,
     run(v){const inc=85000,rate=.22,saved=v*rate,match=inc*.05;
       return{big:usd(saved),sub:"less federal tax this year · $85k salary, 22% bracket",
