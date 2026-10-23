@@ -162,7 +162,6 @@ input[type=email],input[type=password],input[type=text],select{width:100%;paddin
 .prose h1{font-size:2.4rem;margin-bottom:8px}
 .prose h2{font-size:1.3rem;margin:28px 0 6px}
 .prose p,.prose li{color:var(--muted)}
-.draft{background:var(--green-soft);border-radius:12px;padding:12px 14px;font-size:.9rem}
 
 footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);font-size:.9rem}
 .foot{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:flex-start}
@@ -390,31 +389,6 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
   </div>
 </div>
 
-<!-- PRIVACY -->
-<div class="view" data-view="privacy" hidden>
-  <div class="wrap prose">
-    <h1>Privacy Policy</h1>
-    <p class="draft">Draft for attorney review. Not yet in effect.</p>
-    <h2>What we collect</h2><p>Account details (name, email), financial data you choose to connect (bank, loan, payroll, accounting and tax documents), and basic usage data to keep the app working.</p>
-    <h2>How we use it</h2><p>To run your scenarios, show your dashboards and share data with professionals you invite. We do not sell your data.</p>
-    <h2>Your controls</h2><p>Disconnect any account, turn AI off, export or delete your data at any time from Settings.</p>
-    <h2>Security</h2><p>Data is encrypted in transit and at rest. Bank connections use read-only access through regulated providers.</p>
-    <h2>Contact</h2><p>Questions about your data? Email <a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a>.</p>
-  </div>
-</div>
-
-<!-- TERMS -->
-<div class="view" data-view="terms" hidden>
-  <div class="wrap prose">
-    <h1>Terms of Service</h1>
-    <p class="draft">Draft for attorney review. Not yet in effect.</p>
-    <h2>Education, not advice</h2><p>BlackWise provides educational tools and estimates. It is not investment, tax or legal advice. Talk to a licensed professional before acting.</p>
-    <h2>Your account</h2><p>Keep your login secure. You're responsible for activity on your account and for the accuracy of data you enter.</p>
-    <h2>Subscriptions</h2><p>Paid plans renew until canceled. You can cancel anytime; access continues to the end of the billing period.</p>
-    <h2>Changes</h2><p>We'll notify you before material changes to these terms.</p>
-    <h2>Contact</h2><p><a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></p>
-  </div>
-</div>
 </main>
 
 <footer>
@@ -422,7 +396,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
     <div class="foot">
       <div><a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a><div>Get Wise. Stay in the Black.</div><div><a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></div></div>
       <nav aria-label="Footer">
-        <a href="#features" data-go="features">Features</a><a href="#pricing" data-go="pricing">Pricing</a><a href="#about" data-go="about">About</a><a href="#login" data-go="login">Log in</a><a href="#privacy" data-go="privacy">Privacy</a><a href="#terms" data-go="terms">Terms</a>
+        <a href="#features" data-go="features">Features</a><a href="#pricing" data-go="pricing">Pricing</a><a href="#about" data-go="about">About</a><a href="#login" data-go="login">Log in</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a>
       </nav>
     </div>
     <p class="disclaimer">BlackWise is an educational financial tool by JMM Group. Results are estimates based on the information you provide and are not investment, tax or legal advice. © 2026 JMM Group.</p>
@@ -453,6 +427,7 @@ document.addEventListener("click",e=>{
 });
 $("menuBtn").onclick=()=>{const o=$("mainNav").classList.toggle("open");$("menuBtn").setAttribute("aria-expanded",o)};
 const h=location.hash.slice(1);
+if(h==="privacy"||h==="terms") location.replace("/"+h); // old in-page links moved to their own pages
 h==="waitlist"?show("home","waitlist"):show(h||"home");
 
 /* ---------- live phone scenarios (sample numbers) ---------- */
