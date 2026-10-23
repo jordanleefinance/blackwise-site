@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BlackWise</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="BlackWise: personal and business finance in one app. Get Wise. Stay in the Black.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: app-first. Sticky nav, a black "in the black" hero on ledger grid with a question list and live phone, then squared ledger sections on a paper ground. */
+:root{
+  --bg:#F6F7F4; --surface:#FFFFFF; --ink:#0B0D0C; --muted:#5B6560; --line:#DDE3DE;
+  --green:#0F7B4C; --green-soft:#E3F2EA; --red:#B3361F; --amber:#A86A00;
+  --phone:#0B0D0C; --screen:#111513; --screen-ink:#EEF3EF; --screen-muted:#8E9A93; --screen-line:#24302A; --screen-green:#34C17F;
+  --hero-bg:#0A0D0B; --hero-ink:#EEF3EF; --hero-muted:#9DAAA3; --hero-line:#1C2621;
+  --f-display:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C0F0D; --surface:#141917; --ink:#EEF3EF; --muted:#9AA6A0; --line:#26302B;
+  --green:#3CCB86; --green-soft:#13291F; --red:#F07A62; --amber:#E2A740; --phone:#2A322E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C0F0D; --surface:#141917; --ink:#EEF3EF; --muted:#9AA6A0; --line:#26302B;
+  --green:#3CCB86; --green-soft:#13291F; --red:#F07A62; --amber:#E2A740; --phone:#2A322E; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);line-height:1.08;text-wrap:balance;margin:0;letter-spacing:-.02em}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wise{font-style:italic;color:var(--green);font-weight:800;letter-spacing:-.01em;padding-right:.04em}
+.brand{font-family:var(--f-display);font-weight:800;font-size:1.35rem;text-decoration:none;letter-spacing:-.02em}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:6px}
+
+/* nav */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:20px;padding-block:14px}
+.nav nav{display:flex;gap:18px;margin-left:auto;flex-wrap:wrap}
+.nav nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.95rem}
+.nav nav a[aria-current="page"],.nav nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:10px;padding:11px 20px;font:700 .95rem var(--f-body);cursor:pointer;text-decoration:none;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn-ink{background:var(--ink);color:var(--bg)}
+.btn-green{background:var(--green);color:#fff}
+.btn-line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.menu{display:none;margin-left:auto;background:none;border:0;font:700 1rem var(--f-body);color:var(--ink);cursor:pointer}
+@media (max-width:780px){
+  .menu{display:block}
+  .nav{flex-wrap:wrap}
+  .nav nav{display:none;width:100%;flex-direction:column;gap:12px;margin:0;padding-block:8px}
+  .nav nav.open{display:flex}
+  .nav .login-btn{display:none}
+}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding-block:56px 40px}
+.hero>*{min-width:0}
+.eyebrow{font:500 .78rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;margin:14px 0 18px}
+.hero-band .wise{color:var(--screen-green)}
+.lede{font-size:1.15rem;color:var(--muted);max-width:34em;margin:0 0 26px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.asks{display:flex;gap:8px;flex-wrap:wrap;margin-top:30px}
+.hero-band{background:var(--hero-bg);color:var(--hero-ink);background-image:linear-gradient(var(--hero-line) 1px,transparent 1px),linear-gradient(90deg,var(--hero-line) 1px,transparent 1px);background-size:100% 40px,40px 100%}
+.hero-band .lede{color:var(--hero-muted)}
+.hero-band .eyebrow{color:var(--screen-green)}
+.hero-band .btn-line{color:var(--hero-ink);box-shadow:inset 0 0 0 1.5px #3A4741}
+.hero-band .btn-green{background:#1E9E62}
+.asks{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:10px;border:1px solid var(--hero-line);border-radius:12px;overflow:hidden;background:#0F1411}
+.asks-group{display:grid;align-content:start;min-width:0}
+.asks-group+.asks-group{border-left:1px solid var(--hero-line)}
+.asks-group h3{font:500 .7rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted);padding:12px 14px 6px}
+.ask{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;border:0;border-top:1px solid var(--hero-line);background:transparent;color:var(--hero-ink);padding:10px 14px;font:600 .88rem/1.35 var(--f-body);cursor:pointer;transition:background .15s}
+.ask::after{content:"→";color:var(--hero-muted);transition:transform .15s}
+.ask:hover{background:#151C18}
+.ask[aria-pressed="true"]{background:#13291F;color:#7FE8B3}
+.ask[aria-pressed="true"]::after{color:#7FE8B3;transform:translateX(3px)}
+.asks-label{font:500 .75rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--hero-muted);margin-top:30px}
+@media (max-width:560px){.asks{grid-template-columns:1fr}.asks-group+.asks-group{border-left:0;border-top:1px solid var(--hero-line)}}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:36px;padding-block:36px 24px}}
+
+/* phone */
+.phone{width:min(340px,100%);margin:0 auto;aspect-ratio:9/19;max-width:100%;background:#1A211D;border-radius:44px;padding:11px;box-shadow:0 0 0 1px #2C3832,0 40px 80px -30px rgba(52,193,127,.25)}
+.screen{height:100%;border-radius:36px;background:var(--screen);color:var(--screen-ink);padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden;font-size:.9rem}
+.status{display:flex;justify-content:space-between;font:500 .72rem var(--f-mono);color:var(--screen-muted)}
+.apphead{display:flex;justify-content:space-between;align-items:center}
+.apphead .brand{font-size:1.05rem;color:var(--screen-ink)}
+.apphead .wise{color:var(--screen-green)}
+.seg{display:flex;background:var(--screen-line);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--screen-muted);font:700 .72rem var(--f-body);padding:5px 10px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--screen-ink);color:var(--screen)}
+.q{font-family:var(--f-display);font-weight:700;font-size:1.25rem;line-height:1.15}
+.big{font:500 2.2rem var(--f-mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.sub{color:var(--screen-muted);font-size:.78rem}
+.slider label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--screen-muted)}
+.slider output{font-family:var(--f-mono);color:var(--screen-ink)}
+input[type=range]{width:100%;accent-color:#34C17F}
+.rows{display:grid;gap:6px;border-top:1px solid var(--screen-line);padding-top:10px}
+.row{display:flex;justify-content:space-between;font-size:.8rem}
+.row b{font-family:var(--f-mono);font-weight:500;font-variant-numeric:tabular-nums}
+.verdict{display:inline-flex;align-self:flex-start;gap:6px;align-items:center;border-radius:999px;padding:4px 10px;font-weight:700;font-size:.75rem}
+.v-good{background:#173A28;color:#5FE0A0}.v-warn{background:#3A2E12;color:#F2C05A}.v-bad{background:#3D1A14;color:#FF8C73}
+.coach{margin-top:auto;background:var(--screen-line);border-radius:16px 16px 16px 4px;padding:10px 12px;font-size:.8rem;line-height:1.45}
+.coach small{display:block;font:500 .65rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--screen-green);margin-bottom:3px}
+.ai{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--screen-muted)}
+.switch{position:relative;width:38px;height:22px;border-radius:999px;border:0;background:var(--screen-line);cursor:pointer}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--screen-muted);transition:left .2s,background .2s}
+.switch[aria-checked="true"]{background:#1F6B47}.switch[aria-checked="true"]::after{left:19px;background:#fff}
+
+/* sections */
+section.band{padding-block:72px;border-top:1px solid var(--line)}
+.sec-head{max-width:40em;margin-bottom:36px}
+.sec-head h2{font-size:clamp(1.9rem,3.6vw,2.8rem);font-weight:700;margin:10px 0 12px}
+.sec-head p{color:var(--muted);margin:0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media (max-width:860px){.grid3,.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:26px;min-width:0}
+.panel h3{font-size:1.3rem;margin-bottom:8px}
+.panel p{color:var(--muted);margin:0}
+.panel ul{margin:12px 0 0;padding-left:18px;color:var(--muted)}
+.tag{font:500 .72rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.ladder div{padding:20px;border-right:1px solid var(--line);min-width:0}
+.ladder div:last-child{border-right:0}
+.ladder b{display:block;font-family:var(--f-display);font-size:1.05rem;margin:6px 0 4px}
+.ladder span{color:var(--muted);font-size:.9rem}
+@media (max-width:860px){.ladder{grid-template-columns:1fr}.ladder div{border-right:0;border-bottom:1px solid var(--line)}.ladder div:last-child{border-bottom:0}}
+.toggle-demo{display:flex;align-items:center;gap:14px;margin-top:18px}
+.toggle-demo .switch{background:var(--line)}
+.toggle-demo .switch[aria-checked="true"]{background:var(--green)}
+
+/* pricing */
+.price{font:500 2.2rem var(--f-mono);letter-spacing:-.03em;margin:10px 0 2px}
+.price small{font:500 .9rem var(--f-body);color:var(--muted)}
+.panel.feature{border:2px solid var(--green)}
+.bill{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:24px}
+.bill button{border:0;background:transparent;color:var(--muted);font:700 .85rem var(--f-body);padding:7px 14px;border-radius:999px;cursor:pointer}
+.bill button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.note{font-size:.85rem;color:var(--muted)}
+
+/* forms */
+form{display:grid;gap:12px}
+.field{display:grid;gap:6px}
+.field label{font-weight:600;font-size:.9rem}
+input[type=email],input[type=password],input[type=text],select{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:500 1rem var(--f-body)}
+.inline{display:flex;gap:10px;flex-wrap:wrap}
+.inline input{flex:1 1 220px}
+.msg{min-height:1.4em;font-size:.9rem;margin:0}
+.msg.ok{color:var(--green)}.msg.err{color:var(--red)}
+.auth{max-width:440px;margin:56px auto}
+.tabs{display:flex;gap:6px;margin-bottom:18px}
+.tabs button{flex:1;border:0;border-radius:12px;padding:10px;font:700 .9rem var(--f-body);background:var(--surface);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.linkbtn{background:none;border:0;color:var(--green);font:600 .9rem var(--f-body);cursor:pointer;padding:0;justify-self:start}
+
+/* legal / prose */
+.prose{max-width:68ch;padding-block:56px}
+.prose h1{font-size:2.4rem;margin-bottom:8px}
+.prose h2{font-size:1.3rem;margin:28px 0 6px}
+.prose p,.prose li{color:var(--muted)}
+.draft{background:var(--green-soft);border-radius:12px;padding:12px 14px;font-size:.9rem}
+
+footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);font-size:.9rem}
+.foot{display:flex;gap:24px;flex-wrap:wrap;justify-content:space-between;align-items:flex-start}
+.foot nav{display:flex;gap:16px;flex-wrap:wrap}
+.foot a{text-decoration:none}
+.disclaimer{margin-top:18px;font-size:.8rem;max-width:80ch}
+
+.view{animation:fade .35s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a>
+    <button class="menu" id="menuBtn" aria-expanded="false" aria-controls="mainNav">Menu</button>
+    <nav id="mainNav" aria-label="Main">
+      <a href="#features" data-go="features">Features</a>
+      <a href="#pricing" data-go="pricing">Pricing</a>
+      <a href="#about" data-go="about">About</a>
+      <a href="#login" data-go="login">Log in</a>
+    </nav>
+    <a class="btn btn-ink login-btn" href="#waitlist" data-go="home" data-scroll="waitlist">Join the beta</a>
+  </div>
+</header>
+
+<main>
+<!-- HOME -->
+<div class="view" data-view="home">
+  <section class="hero-band"><div class="wrap hero">
+    <div>
+      <div class="eyebrow">Personal + business finance, one app</div>
+      <h1>Get <span class="wise">Wise.</span><br>Stay in the Black.</h1>
+      <p class="lede">Ask real money questions and get answers built from your own numbers. From your first college budget to running a multimillion-dollar company, BlackWise shows the math, the assumptions, and the levers you can pull.</p>
+      <div class="ctas">
+        <a class="btn btn-green" href="#waitlist" data-scroll="waitlist">Join the beta</a>
+        <a class="btn btn-line" href="#features" data-go="features">See what's inside</a>
+      </div>
+      <div class="asks-label">Ask BlackWise · pick a question, the phone answers live</div>
+      <div class="asks" id="asks">
+        <div class="asks-group"><h3>Personal</h3>
+          <button class="ask" data-s="car" aria-pressed="true">Can I afford this car?</button>
+          <button class="ask" data-s="loan">When will my student loans be gone?</button>
+          <button class="ask" data-s="retire">How much should I save for retirement to lower my taxes?</button>
+          <button class="ask" data-s="cut">What do I need to cut to reach my investing goal?</button>
+        </div>
+        <div class="asks-group"><h3>Business</h3>
+          <button class="ask" data-s="scorp">Should I elect S-corp?</button>
+          <button class="ask" data-s="hire">Can I hire my first employee?</button>
+          <button class="ask" data-s="compare">How does my business compare to others in my area?</button>
+          <button class="ask" data-s="price">How should I price my product or service?</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone" aria-label="BlackWise app preview">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span>●●● 5G</span></div>
+        <div class="apphead">
+          <span class="brand">Black<span class="wise">Wise</span></span>
+          <div class="seg" role="group" aria-label="Workspace">
+            <button id="wsP" aria-pressed="true">Personal</button>
+            <button id="wsB" aria-pressed="false">Business</button>
+          </div>
+        </div>
+        <div class="q" id="pQ">Can I afford this car?</div>
+        <div>
+          <div class="big" id="pBig">$0</div>
+          <div class="sub" id="pSub">per month</div>
+        </div>
+        <span class="verdict v-good" id="pVerdict">Fits your plan</span>
+        <div class="slider">
+          <label for="pRange"><span id="pRangeLabel">Car price</span><output id="pRangeOut" for="pRange">$0</output></label>
+          <input type="range" id="pRange" min="10000" max="80000" step="1000" value="32000">
+        </div>
+        <div class="rows" id="pRows"></div>
+        <div class="coach" id="pCoach"><small>BlackWise Coach</small><span id="pCoachText"></span></div>
+        <div class="ai"><span>AI Coach</span><button class="switch" id="aiSwitch" role="switch" aria-checked="true" aria-label="AI Coach"></button></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">How it works</div>
+        <h2>Your numbers in. Clear answers out.</h2>
+        <p>Every answer uses formulas you can audit. AI helps explain, and you can switch it off at any time.</p>
+      </div>
+      <div class="grid3">
+        <div class="panel"><div class="tag">Connect</div><h3>Bring in your levers</h3><p>Bank accounts, loans, pay stubs, QuickBooks and tax forms, pulled in only with your consent.</p></div>
+        <div class="panel"><div class="tag">Ask</div><h3>Ask "Can I…?"</h3><p>Afford a car, pay off loans, elect S-corp, hire someone. Each answer shows the result, the assumptions, and which data it used.</p></div>
+        <div class="panel"><div class="tag">Share</div><h3>Loop in your pro</h3><p>Send a scenario to your CPA or bookkeeper to review. Invited accountants never pay.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Built for every stage</div>
+        <h2>One app from your first budget to your first hundred employees.</h2>
+      </div>
+      <div class="ladder">
+        <div><span class="tag">18+</span><b>First budget</b><span>College costs, first paycheck, building credit.</span></div>
+        <div><span class="tag">Early career</span><b>Debt and goals</b><span>Loan payoff plans, emergency fund, first home.</span></div>
+        <div><span class="tag">Side hustle</span><b>1099 income</b><span>Quarterly taxes, W-2 vs self-employed math.</span></div>
+        <div><span class="tag">Small business</span><b>Run the books</b><span>Cash flow, S-corp, first hire, pricing.</span></div>
+        <div><span class="tag">Growing company</span><b>Scale with control</b><span>Team seats, advisor access, runway.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap grid2">
+      <div class="panel">
+        <div class="tag">Two workspaces</div>
+        <h3>Personal and business stay separate</h3>
+        <p>Your bookkeeper sees the business, never your personal accounts. Owner View reads across both, only for you, to answer whole-life questions.</p>
+      </div>
+      <div class="panel">
+        <div class="tag">Your choice</div>
+        <h3>AI is optional, always</h3>
+        <p>Every scenario works with AI off. Turn the Coach on when you want plain-English explanations.</p>
+        <div class="toggle-demo"><button class="switch" id="aiSwitch2" role="switch" aria-checked="true" aria-label="AI Coach demo"></button><span id="aiLabel2">AI Coach is on</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="waitlist">
+    <div class="wrap grid2" style="align-items:center">
+      <div class="sec-head" style="margin:0">
+        <div class="eyebrow">Beta opens this fall</div>
+        <h2>Be first in line.</h2>
+        <p>Beta testers lock in founding pricing for life. iPhone first, Android and web next.</p>
+      </div>
+      <form id="waitForm" class="panel">
+        <div class="field"><label for="wEmail">Email</label><input type="email" id="wEmail" required placeholder="you@example.com" autocomplete="email"></div>
+        <div class="field"><label for="wType">I'm joining for</label>
+          <select id="wType"><option>Personal finances</option><option>My business</option><option>Both</option><option>I'm an accountant or advisor</option></select></div>
+        <button class="btn btn-green" type="submit">Join the beta</button>
+        <p class="msg" id="wMsg" role="status"></p>
+      </form>
+    </div>
+  </section>
+</div>
+
+<!-- FEATURES -->
+<div class="view" data-view="features" hidden>
+  <div class="wrap" style="padding-block:56px">
+    <div class="sec-head">
+      <div class="eyebrow">Features</div>
+      <h2>Education plus hands-on tools.</h2>
+      <p>Learn the concept, then run it on your own numbers.</p>
+    </div>
+    <div class="grid2">
+      <div class="panel"><div class="tag">Personal</div><h3>For individuals</h3>
+        <ul><li>Budget builder for college and first jobs</li><li>Debt payoff: avalanche vs snowball, extra payments</li><li>"Can I afford this?" for cars, homes and big purchases</li><li>Goal tracking: emergency fund, down payment, retirement</li><li>Tax Center: W-2, 1099 and quarterly estimates</li></ul></div>
+      <div class="panel"><div class="tag">Business</div><h3>For owners</h3>
+        <ul><li>QuickBooks and bank connections</li><li>Cash flow, runway and break-even</li><li>S-corp election and reasonable salary estimates</li><li>Hiring, loan and price-change scenarios</li><li>Seats for partners, bookkeepers and team members</li></ul></div>
+      <div class="panel"><div class="tag">Learn</div><h3>Money lessons that fit your stage</h3><p>Short lessons tied to the tool you're using, from credit basics to reading a P&amp;L.</p></div>
+      <div class="panel"><div class="tag">Professionals</div><h3>For accountants and firms</h3><p>Multi-client review queue, client-shared scenarios, and firm plans. Accountants invited by a client use BlackWise free.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="view" data-view="pricing" hidden>
+  <div class="wrap" style="padding-block:56px">
+    <div class="sec-head">
+      <div class="eyebrow">Pricing</div>
+      <h2>Free for you. Fair for your business.</h2>
+      <p>Beta pricing. Founding members keep their price for life.</p>
+    </div>
+    <div class="bill" role="group" aria-label="Billing period">
+      <button id="bMonth" aria-pressed="true">Monthly</button>
+      <button id="bYear" aria-pressed="false">Annual (2 months free)</button>
+    </div>
+    <div class="grid3">
+      <div class="panel"><div class="tag">Personal</div><div class="price">$0 <small>forever</small></div><p>Budgets, debt plans, goals, lessons and personal scenarios.</p></div>
+      <div class="panel feature"><div class="tag">Business</div><div class="price"><span data-m="29">$29</span> <small data-u>/ business / mo</small></div><p>Owner plus one seat, QuickBooks and one bank, every business scenario. Extra seats <span data-m="7">$7</span><span data-u2> / mo</span>.</p></div>
+      <div class="panel"><div class="tag">Firm</div><div class="price"><span data-m="10">$10</span> <small data-u>/ client / mo</small></div><p>Review queue across clients, bulk edits and volume discounts. Invited accountants pay nothing.</p></div>
+    </div>
+    <p class="note" style="margin-top:18px">AI features are included on every paid plan and can always be turned off. Prices are placeholders during beta.</p>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="view" data-view="about" hidden>
+  <div class="wrap prose">
+    <div class="eyebrow">About</div>
+    <h1>Making complex money simple.</h1>
+    <p>BlackWise is built by JMM Group, a finance, accounting and tax firm that works with individuals, nonprofits and growing businesses. We kept seeing the same thing: people make big money decisions without seeing the math behind them.</p>
+    <p>So we built one place where your personal and business finances live, connected to the professionals who help you, and able to answer real questions with your own data. Every number shows its formula. Nothing is a black box.</p>
+    <h2>What we believe</h2>
+    <ul><li>Transparency first. You should see what you pay in interest, taxes and fees.</li><li>Education and tools belong together.</li><li>AI should help, never decide, and it should always have an off switch.</li></ul>
+    <h2>Get in touch</h2><p>Partnerships, press or questions: <a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></p>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="view" data-view="login" hidden>
+  <div class="wrap">
+    <div class="auth panel">
+      <a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a>
+      <p class="note" style="margin:6px 0 18px">Same account as the app.</p>
+      <div class="tabs" role="group" aria-label="Account">
+        <button id="tIn" aria-pressed="true">Log in</button>
+        <button id="tUp" aria-pressed="false">Create account</button>
+      </div>
+      <form id="authForm">
+        <div class="field"><label for="aEmail">Email</label><input type="email" id="aEmail" required autocomplete="email"></div>
+        <div class="field"><label for="aPass">Password</label><input type="password" id="aPass" required minlength="8" autocomplete="current-password"></div>
+        <button class="btn btn-ink" type="submit" id="aSubmit">Log in</button>
+        <button class="linkbtn" type="button" id="aReset">Forgot password?</button>
+        <p class="msg" id="aMsg" role="status"></p>
+      </form>
+      <div id="signedIn" hidden>
+        <p>Signed in as <b id="who"></b>.</p>
+        <button class="btn btn-line" id="aOut" type="button">Log out</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY -->
+<div class="view" data-view="privacy" hidden>
+  <div class="wrap prose">
+    <h1>Privacy Policy</h1>
+    <p class="draft">Draft for attorney review. Not yet in effect.</p>
+    <h2>What we collect</h2><p>Account details (name, email), financial data you choose to connect (bank, loan, payroll, accounting and tax documents), and basic usage data to keep the app working.</p>
+    <h2>How we use it</h2><p>To run your scenarios, show your dashboards and share data with professionals you invite. We do not sell your data.</p>
+    <h2>Your controls</h2><p>Disconnect any account, turn AI off, export or delete your data at any time from Settings.</p>
+    <h2>Security</h2><p>Data is encrypted in transit and at rest. Bank connections use read-only access through regulated providers.</p>
+    <h2>Contact</h2><p>Questions about your data? Email <a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a>.</p>
+  </div>
+</div>
+
+<!-- TERMS -->
+<div class="view" data-view="terms" hidden>
+  <div class="wrap prose">
+    <h1>Terms of Service</h1>
+    <p class="draft">Draft for attorney review. Not yet in effect.</p>
+    <h2>Education, not advice</h2><p>BlackWise provides educational tools and estimates. It is not investment, tax or legal advice. Talk to a licensed professional before acting.</p>
+    <h2>Your account</h2><p>Keep your login secure. You're responsible for activity on your account and for the accuracy of data you enter.</p>
+    <h2>Subscriptions</h2><p>Paid plans renew until canceled. You can cancel anytime; access continues to the end of the billing period.</p>
+    <h2>Changes</h2><p>We'll notify you before material changes to these terms.</p>
+    <h2>Contact</h2><p><a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></p>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a><div>Get Wise. Stay in the Black.</div><div><a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></div></div>
+      <nav aria-label="Footer">
+        <a href="#features" data-go="features">Features</a><a href="#pricing" data-go="pricing">Pricing</a><a href="#about" data-go="about">About</a><a href="#login" data-go="login">Log in</a><a href="#privacy" data-go="privacy">Privacy</a><a href="#terms" data-go="terms">Terms</a>
+      </nav>
+    </div>
+    <p class="disclaimer">BlackWise is an educational financial tool by JMM Group. Results are estimates based on the information you provide and are not investment, tax or legal advice. © 2026 JMM Group.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const usd=n=>"$"+Math.round(n).toLocaleString("en-US");
+
+/* ---------- router ---------- */
+const views=[...document.querySelectorAll("[data-view]")];
+function show(name,scrollId){
+  if(!views.some(v=>v.dataset.view===name)) name="home";
+  views.forEach(v=>v.hidden=v.dataset.view!==name);
+  document.querySelectorAll("#mainNav a").forEach(a=>a.dataset.go===name?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  $("mainNav").classList.remove("open");$("menuBtn").setAttribute("aria-expanded","false");
+  if(scrollId) requestAnimationFrame(()=>$(scrollId).scrollIntoView({behavior:"smooth"}));
+  else window.scrollTo(0,0);
+}
+document.addEventListener("click",e=>{
+  const a=e.target.closest("[data-go],[data-scroll]");if(!a)return;
+  e.preventDefault();
+  const go=a.dataset.go||"home";
+  try{history.replaceState(null,"","#"+(a.dataset.scroll||go))}catch(_){}
+  show(go,a.dataset.scroll);
+});
+$("menuBtn").onclick=()=>{const o=$("mainNav").classList.toggle("open");$("menuBtn").setAttribute("aria-expanded",o)};
+const h=location.hash.slice(1);
+h==="waitlist"?show("home","waitlist"):show(h||"home");
+
+/* ---------- live phone scenarios (sample numbers) ---------- */
+const pmt=(rate,n,pv)=>rate===0?pv/n:pv*rate/(1-Math.pow(1+rate,-n));
+const S={
+  car:{ws:"P",q:"Can I afford this car?",label:"Car price",min:10000,max:80000,step:1000,val:32000,fmt:usd,
+    run(v){const gross=6000,down=v*.2,pay=pmt(.069/12,48,v-down),ins=150,share=(pay+ins)/gross;
+      return{big:usd(pay),sub:"per month · 20% down, 4 years, 6.9% APR",
+        verdict:share<=.10?["v-good","Fits the 20/4/10 rule"]:share<=.15?["v-warn","Stretch: over 10% of income"]:["v-bad","Over budget"],
+        rows:[["Down payment",usd(down)],["Payment + insurance",usd(pay+ins)],["Share of $6,000 gross",(share*100).toFixed(1)+"%"]],
+        coach:share<=.10?"Nice. Car costs stay under 10% of your gross income, so your savings goal is safe.":"Try a price near "+usd(v*.10/share)+" or a bigger down payment to get back under 10% of income.",
+        formula:"payment = r·L ÷ (1 − (1+r)^−48), guardrail: (payment + insurance) ≤ 10% of gross income"}}},
+  loan:{ws:"P",q:"When are my student loans gone?",label:"Monthly payment",min:350,max:1500,step:25,val:500,fmt:usd,
+    run(v){const bal=32000,r=.055/12;let b=bal,m=0,int=0;while(b>0&&m<600){const i=b*r;int+=i;b=b+i-v;m++}
+      const base=Math.log(1-bal*r/350)/-Math.log(1+r);const saved=Math.max(0,Math.round(base-m));
+      const d=new Date(2026,10+m,1);
+      return{big:d.toLocaleString("en-US",{month:"short",year:"numeric"}),sub:"debt-free date · $32,000 at 5.5%",
+        verdict:m<=60?["v-good",m+" months to go"]:m<=120?["v-warn",m+" months to go"]:["v-bad",m+" months to go"],
+        rows:[["Total interest",usd(int)],["Months saved vs $350/mo",String(saved)],["Payoff time",(m/12).toFixed(1)+" years"]],
+        coach:"Every extra $100 a month moves your date up. At "+usd(v)+" you finish "+saved+" months sooner than the minimum.",
+        formula:"month by month: balance = balance × (1 + 5.5%/12) − payment, until balance ≤ 0"}}},
+  scorp:{ws:"B",q:"Should I elect S-corp?",label:"Net profit",min:30000,max:250000,step:5000,val:90000,fmt:usd,
+    run(v){const salary=v*.6,se=.153*.9235*v,fica=.153*salary,cost=2500,save=se-fica-cost;
+      return{big:usd(Math.max(save,0)),sub:"estimated yearly tax savings",
+        verdict:save>5000?["v-good","Worth a CPA review"]:save>0?["v-warn","Small savings"]:["v-bad","Probably not yet"],
+        rows:[["Reasonable salary (60%)",usd(salary)],["Self-employment tax now",usd(se)],["Payroll + extra costs",usd(fica+cost)]],
+        coach:save>5000?"At this profit an S-corp could save real money. Send this scenario to your CPA to confirm salary.":"Savings are thin at this profit level once payroll and filing costs are counted.",
+        formula:"savings ≈ 15.3% × 92.35% × profit − 15.3% × salary − $2,500 costs (ignores wage cap, QBI, state tax)"}}},
+  hire:{ws:"B",q:"Can I hire my first employee?",label:"Hourly wage",min:15,max:40,step:1,val:22,fmt:v=>"$"+v+"/hr",
+    run(v){const monthly=v*2080*1.12/12,profit=11000,share=monthly/profit;
+      return{big:usd(monthly),sub:"true monthly cost · 40 hrs/wk + ~12% employer taxes",
+        verdict:share<=.4?["v-good","Profit covers it"]:share<=.6?["v-warn","Tight: plan for ramp-up"]:["v-bad","Not yet"],
+        rows:[["Annual cost",usd(monthly*12)],["Share of $11,000 monthly profit",(share*100).toFixed(0)+"%"],["Profit left each month",usd(profit-monthly)]],
+        coach:share<=.4?"You can carry this hire. Keep 3 months of their cost in reserve while they ramp up.":"Consider part-time to start, or raise prices first. Try a lower wage to compare.",
+        formula:"monthly cost = wage × 2,080 hrs × 1.12 ÷ 12, compared to average monthly profit"}}},
+  retire:{ws:"P",q:"How much should I save for retirement to lower my taxes?",label:"401(k) per year",min:0,max:24500,step:500,val:6000,fmt:usd,
+    run(v){const inc=85000,rate=.22,saved=v*rate,match=inc*.05;
+      return{big:usd(saved),sub:"less federal tax this year · $85k salary, 22% bracket",
+        verdict:v>=match?["v-good","Getting the full 5% match"]:["v-warn","Leaving match money on the table"],
+        rows:[["Taxable income",usd(inc-v)],["Real cost to your paycheck",usd(v-saved)],["Employer match (5%)",usd(Math.min(v,match))]],
+        coach:v>=match?"Each extra $1,000 you defer saves about $220 in tax now. A Roth or HSA could also help. Ask your CPA which fits.":"Put in at least "+usd(match)+" a year to get your full employer match. That's free money before any tax savings.",
+        formula:"tax saved ≈ pre-tax contribution × 22% marginal rate (federal only, 2026 limit $24,500)"}}},
+  cut:{ws:"P",q:"What do I need to cut to reach my investing goal?",label:"Goal by age 60",min:100000,max:2000000,step:25000,val:750000,fmt:usd,
+    run(v){const r=.07/12,n=30*12,need=v*r/(Math.pow(1+r,n)-1),now=300,gap=Math.max(0,need-now),flex=410+96+260;
+      return{big:usd(gap),sub:"to cut each month · age 30 today, 7% average return",
+        verdict:gap===0?["v-good","Already on track"]:gap<=flex?["v-warn","Doable with cuts"]:["v-bad","Needs more income too"],
+        rows:[["Invest each month",usd(need)],["Investing now",usd(now)],["Flexible spending found",usd(flex)]],
+        coach:gap===0?"You're on track. Keep investing $300 a month and let time do the work.":gap<=flex?"Start with dining out ($410/mo) and subscriptions ($96/mo). Cutting "+usd(gap)+" gets you to "+usd(v)+" by 60.":"Cuts alone won't close this gap. Pair them with a raise, side income, or a later target date.",
+        formula:"monthly needed = goal × r ÷ ((1 + r)^360 − 1), r = 7%/12; cut = needed − current investing"}}},
+  compare:{ws:"B",q:"How does my business compare to others in my area?",label:"Your net profit margin",min:0,max:30,step:1,val:11,fmt:v=>v+"%",
+    run(v){const med=9,pct=Math.round(100/(1+Math.exp(-(v-med)/3.2)));
+      return{big:pct+"th",sub:"percentile · sample peers: landscaping, Hampton Roads",
+        verdict:pct>=75?["v-good","Top quarter"]:pct>=40?["v-warn","Middle of the pack"]:["v-bad","Below most peers"],
+        rows:[["Your margin",v+"%"],["Area median (sample)",med+"%"],["Profit per $100k sales",usd(v*1000)]],
+        coach:pct>=75?"You keep more of each dollar than most local peers. Protect it as you grow.":"Peers at the median keep "+med+"% of revenue. Labor and pricing are the usual gaps. Try the pricing question next.",
+        formula:"percentile estimated from peer margin distribution (median "+med+"%); live version uses industry benchmarks for your zip"}}},
+  price:{ws:"B",q:"How should I price my product or service?",label:"Price per unit",min:30,max:150,step:1,val:60,fmt:usd,
+    run(v){const cost=28,fixed=6000,units=250,gm=(v-cost)/v,be=Math.ceil(fixed/(v-cost)),profit=(v-cost)*units-fixed,target=cost/(1-.5);
+      return{big:(gm*100).toFixed(0)+"%",sub:"gross margin · $28 cost per unit",
+        verdict:gm>=.5?["v-good","Healthy margin"]:gm>=.35?["v-warn","Thin margin"]:["v-bad","Too low to grow"],
+        rows:[["Break-even",be+" units / mo"],["Profit at 250 units",usd(profit)],["Price for 50% margin",usd(target)]],
+        coach:gm>=.5?"At "+usd(v)+" you cover $6,000 in fixed costs after "+be+" sales. Test a small raise with new customers.":"Pricing near "+usd(target)+" gives you a 50% margin, so there's room for marketing and slow months.",
+        formula:"margin = (price − cost) ÷ price; break-even = fixed costs ÷ (price − cost)"}}}
+};
+let cur="car",ai=true;
+function render(){
+  const s=S[cur],v=+$("pRange").value,o=s.run(v);
+  $("pQ").textContent=s.q;$("pBig").textContent=o.big;$("pSub").textContent=o.sub;
+  $("pVerdict").className="verdict "+o.verdict[0];$("pVerdict").textContent=o.verdict[1];
+  $("pRangeLabel").textContent=s.label;$("pRangeOut").textContent=s.fmt(v);
+  $("pRows").innerHTML=o.rows.map(r=>`<div class="row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("");
+  $("pCoach").querySelector("small").textContent=ai?"BlackWise Coach":"Formula";
+  $("pCoachText").textContent=ai?o.coach:o.formula;
+}
+function pick(key){
+  cur=key;const s=S[key],r=$("pRange");
+  r.min=s.min;r.max=s.max;r.step=s.step;r.value=s.val;
+  document.querySelectorAll(".ask").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===key));
+  $("wsP").setAttribute("aria-pressed",s.ws==="P");$("wsB").setAttribute("aria-pressed",s.ws==="B");
+  render();
+}
+$("asks").onclick=e=>{const b=e.target.closest(".ask");if(b)pick(b.dataset.s)};
+$("pRange").oninput=render;
+$("wsP").onclick=()=>pick(S[cur].ws==="P"?cur:"car");
+$("wsB").onclick=()=>pick(S[cur].ws==="B"?cur:"scorp");
+function setAI(on){ai=on;["aiSwitch","aiSwitch2"].forEach(id=>$(id).setAttribute("aria-checked",on));$("aiLabel2").textContent=on?"AI Coach is on":"AI Coach is off. Scenarios still work.";render()}
+$("aiSwitch").onclick=()=>setAI(!ai);$("aiSwitch2").onclick=()=>setAI(!ai);
+pick("car");
+
+/* ---------- pricing toggle ---------- */
+function bill(year){
+  $("bMonth").setAttribute("aria-pressed",!year);$("bYear").setAttribute("aria-pressed",year);
+  document.querySelectorAll("[data-m]").forEach(el=>el.textContent="$"+(year?el.dataset.m*10:el.dataset.m));
+  document.querySelectorAll("[data-u]").forEach(el=>el.textContent=el.textContent.replace(/\/ (mo|yr)$/,year?"/ yr":"/ mo"));
+  document.querySelectorAll("[data-u2]").forEach(el=>el.textContent=year?" / yr":" / mo");
+}
+$("bMonth").onclick=()=>bill(false);$("bYear").onclick=()=>bill(true);
+
+/* ---------- Supabase (same project as the app) ---------- */
+const SB_URL="https://mblqcxpecqcevkpgvmde.supabase.co";
+const SB_KEY="sb_publishable_OeMhgBWDWAjZrbvIeoy34A_F2x6d-vh";
+let sb=null;try{sb=window.supabase.createClient(SB_URL,SB_KEY)}catch(_){}
+const say=(el,t,ok)=>{el.textContent=t;el.className="msg "+(ok?"ok":"err")};
+
+let mode="in";
+function setMode(m){mode=m;$("tIn").setAttribute("aria-pressed",m==="in");$("tUp").setAttribute("aria-pressed",m==="up");
+  $("aSubmit").textContent=m==="in"?"Log in":"Create account";$("aPass").autocomplete=m==="in"?"current-password":"new-password";$("aMsg").textContent=""}
+$("tIn").onclick=()=>setMode("in");$("tUp").onclick=()=>setMode("up");
+function signedIn(user){$("authForm").hidden=!!user;$("signedIn").hidden=!user;if(user)$("who").textContent=user.email}
+$("authForm").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("aMsg");
+  if(!sb)return say(m,"Login isn't available in this preview. It works once the site is live on blackwiseai.com.");
+  const email=$("aEmail").value.trim(),password=$("aPass").value;
+  try{
+    const r=mode==="in"?await sb.auth.signInWithPassword({email,password})
+      :await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+"/#login"}});
+    if(r.error)return say(m,r.error.message);
+    if(mode==="up"&&!r.data.session)return say(m,"Check your email to confirm your account.",true);
+    signedIn(r.data.user);
+  }catch(_){say(m,"Couldn't reach the login server. Check your connection and try again.")}
+});
+$("aReset").onclick=async()=>{const m=$("aMsg"),email=$("aEmail").value.trim();
+  if(!email)return say(m,"Enter your email first, then tap Forgot password.");
+  if(!sb)return say(m,"Password reset works once the site is live.");
+  try{const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+"/#login"});
+    r.error?say(m,r.error.message):say(m,"Reset link sent. Check your email.",true)}catch(_){say(m,"Couldn't reach the login server.")}};
+$("aOut").onclick=async()=>{try{await sb.auth.signOut()}catch(_){}signedIn(null)};
+if(sb)sb.auth.getSession().then(({data})=>signedIn(data.session?.user)).catch(()=>{});
+
+$("waitForm").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("wMsg");
+  try{
+    if(!sb)throw 0;
+    const {error}=await sb.from("waitlist").insert({email:$("wEmail").value.trim(),interest:$("wType").value});
+    if(error&&error.code!=="23505")throw error;
+    say(m,"You're on the list. We'll email you when the beta opens.",true);e.target.reset();
+  }catch(_){say(m,"We couldn't save your spot just now. Please try again in a minute.")}
+});
+</script>
+</body>
+</html>
