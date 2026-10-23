@@ -1,0 +1,28 @@
+/* Shared look for the standalone legal pages (privacy, terms, disconnect). Tokens match index.html. */
+:root{--bg:#F6F7F4;--surface:#FFFFFF;--ink:#0B0D0C;--muted:#5B6560;--line:#DDE3DE;--green:#0F7B4C;--green-soft:#E3F2EA;
+  --f:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C0F0D;--surface:#141917;--ink:#EEF3EF;--muted:#9AA6A0;--line:#26302B;--green:#3CCB86;--green-soft:#13291F;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C0F0D;--surface:#141917;--ink:#EEF3EF;--muted:#9AA6A0;--line:#26302B;--green:#3CCB86;--green-soft:#13291F;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.65}
+a{color:var(--green)}
+header,footer{border-color:var(--line);border-style:solid;border-width:0}
+header{border-bottom-width:1px}
+footer{border-top-width:1px;color:var(--muted);font-size:.9rem;padding-block:28px}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px}
+.bar{display:flex;align-items:center;gap:18px;padding-block:14px;flex-wrap:wrap}
+.bar nav{margin-left:auto;display:flex;gap:16px;flex-wrap:wrap}
+.bar nav a{color:var(--muted);text-decoration:none;font-weight:600;font-size:.95rem}
+.brand{font-weight:800;font-size:1.35rem;text-decoration:none;color:var(--ink);letter-spacing:-.02em}
+.wise{font-style:italic;color:var(--green)}
+main{padding-block:40px 56px}
+h1,h2,h3{line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+h1{font-size:clamp(1.9rem,6vw,2.4rem);margin:0 0 6px}
+h2{font-size:1.25rem;margin:32px 0 6px}
+h3{font-size:1.02rem;margin:18px 0 4px}
+p,li{color:var(--muted)}
+strong{color:var(--ink)}
+.meta{font-size:.9rem}
+.note{background:var(--green-soft);border-radius:12px;padding:12px 14px;color:var(--ink)}
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px 12px 34px}
+.btn{display:inline-block;background:var(--green);color:#fff;text-decoration:none;font-weight:700;border-radius:10px;padding:11px 20px}
