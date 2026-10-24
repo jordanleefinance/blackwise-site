@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>BlackWise</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#0A0D0B">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="BlackWise: personal and business finance in one app. Get Wise. Stay in the Black.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +37,8 @@ h1,h2,h3{font-family:var(--f-display);line-height:1.08;text-wrap:balance;margin:
 .wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wise{font-style:italic;color:var(--green);font-weight:800;letter-spacing:-.01em;padding-right:.04em}
 .brand{font-family:var(--f-display);font-weight:800;font-size:1.35rem;text-decoration:none;letter-spacing:-.02em}
+.brand .mark{width:.82em;height:.95em;vertical-align:-.12em;margin-right:.32em;color:var(--green)}
+.apphead .brand .mark{color:var(--screen-green)}
 :focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:6px}
 
 /* nav */
@@ -176,10 +182,11 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="sankofa" viewBox="228 180 568 660"><g fill="none" stroke="currentColor" stroke-width="58" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -40)"><path d="M512 770 C390 680 262 560 262 420 C262 300 350 238 432 256 C512 274 536 360 486 404 C446 438 392 412 404 368"/><path d="M512 770 L512 798 C512 852 458 876 424 850 C398 830 408 790 442 792"/><g transform="translate(1024 0) scale(-1 1)"><path d="M512 770 C390 680 262 560 262 420 C262 300 350 238 432 256 C512 274 536 360 486 404 C446 438 392 412 404 368"/><path d="M512 770 L512 798 C512 852 458 876 424 850 C398 830 408 790 442 792"/></g></g></symbol></svg>
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a>
+    <a class="brand" href="#home" data-go="home"><svg class="mark" aria-hidden="true"><use href="#sankofa"/></svg>Black<span class="wise">Wise</span></a>
     <button class="menu" id="menuBtn" aria-expanded="false" aria-controls="mainNav">Menu</button>
     <nav id="mainNav" aria-label="Main">
       <a href="#features" data-go="features">Features</a>
@@ -228,7 +235,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
       <div class="screen">
         <div class="status"><span>9:41</span><span>●●● 5G</span></div>
         <div class="apphead">
-          <span class="brand">Black<span class="wise">Wise</span></span>
+          <span class="brand"><svg class="mark" aria-hidden="true"><use href="#sankofa"/></svg>Black<span class="wise">Wise</span></span>
           <div class="seg" role="group" aria-label="Workspace">
             <button id="wsP" aria-pressed="true">Personal</button>
             <button id="wsB" aria-pressed="false">Business</button>
@@ -406,7 +413,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
 <div class="view" data-view="login" hidden>
   <div class="wrap">
     <div class="auth panel">
-      <a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a>
+      <a class="brand" href="#home" data-go="home"><svg class="mark" aria-hidden="true"><use href="#sankofa"/></svg>Black<span class="wise">Wise</span></a>
       <p class="note" style="margin:6px 0 18px">Same account as the app.</p>
       <div class="tabs" role="group" aria-label="Account">
         <button id="tIn" aria-pressed="true">Log in</button>
@@ -432,7 +439,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
 <footer>
   <div class="wrap">
     <div class="foot">
-      <div><a class="brand" href="#home" data-go="home">Black<span class="wise">Wise</span></a><div>Get Wise. Stay in the Black.</div><div><a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></div></div>
+      <div><a class="brand" href="#home" data-go="home"><svg class="mark" aria-hidden="true"><use href="#sankofa"/></svg>Black<span class="wise">Wise</span></a><div>Get Wise. Stay in the Black.</div><div><a href="mailto:info@blackwiseai.com">info@blackwiseai.com</a></div></div>
       <nav aria-label="Footer">
         <a href="#features" data-go="features">Features</a><a href="#pricing" data-go="pricing">Pricing</a><a href="#about" data-go="about">About</a><a href="#login" data-go="login">Log in</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a>
       </nav>
