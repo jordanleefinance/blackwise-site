@@ -92,6 +92,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:col
 .seg{display:flex;background:var(--screen-line);border-radius:999px;padding:3px}
 .seg button{border:0;background:transparent;color:var(--screen-muted);font:700 .72rem var(--f-body);padding:5px 10px;border-radius:999px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--screen-ink);color:var(--screen)}
+.seg.models{align-self:flex-start;flex-wrap:wrap}
 .q{font-family:var(--f-display);font-weight:700;font-size:1.25rem;line-height:1.15}
 .big{font:500 2.2rem var(--f-mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .sub{color:var(--screen-muted);font-size:.78rem}
@@ -213,6 +214,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
           <button class="ask" data-s="cut">What do I need to cut to reach my investing goal?</button>
         </div>
         <div class="asks-group"><h3>Business</h3>
+          <button class="ask" data-s="million">How can I make my first $1 million?</button>
           <button class="ask" data-s="runway">Is my business going to be okay? How long until I run out of cash?</button>
           <button class="ask" data-s="scorp">Should I elect S-corp?</button>
           <button class="ask" data-s="hire">Can I hire my first employee?</button>
@@ -233,6 +235,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
           </div>
         </div>
         <div class="q" id="pQ">Can I afford this car?</div>
+        <div class="seg models" id="pModels" role="group" aria-label="Business type" hidden></div>
         <div>
           <div class="big" id="pBig">$0</div>
           <div class="sub" id="pSub">per month</div>
@@ -452,6 +455,19 @@ const S={
         rows:[["Total interest",usd(int)],["Months saved vs $350/mo",String(saved)],["Payoff time",(m/12).toFixed(1)+" years"]],
         coach:"Every extra $100 a month moves your date up. At "+usd(v)+" you finish "+saved+" months sooner than the minimum.",
         formula:"month by month: balance = balance × (1 + 5.5%/12) − payment, until balance ≤ 0"}}},
+  million:{ws:"B",q:"How can I make my first $1 million?",
+    models:[
+      {name:"Consulting",label:"Price per client / year",min:2000,max:50000,step:500,val:12000,unit:"clients",cogs:.10,cac:800,fixed:60000,costNote:"tools, insurance, admin"},
+      {name:"App",label:"Price per user / year",min:10,max:200,step:5,val:60,unit:"subscribers",cogs:.30,cac:25,fixed:150000,costNote:"developers, hosting, app store fees"},
+      {name:"Product",label:"Price per sale",min:10,max:300,step:5,val:45,unit:"sales",cogs:.40,cac:12,fixed:80000,costNote:"inventory, shipping, warehouse"},
+      {name:"Real estate",label:"Net rent per door / year",min:3000,max:20000,step:500,val:9000,unit:"rental doors",cogs:.35,cac:0,fixed:20000,costNote:"taxes, insurance, repairs, management"}],
+    run(v,m){const units=Math.ceil(1e6/v),cogs=1e6*m.cogs,mkt=units*m.cac,exp=cogs+mkt+m.fixed,profit=1e6-exp,
+      perSale=v*(1-m.cogs)-m.cac,needProfit=perSale>0?Math.ceil((1e6+m.fixed)/perSale):Infinity;
+      return{big:units.toLocaleString("en-US")+" "+m.unit,sub:"to reach $1M in revenue in a year · "+Math.ceil(units/12).toLocaleString("en-US")+" a month",
+        verdict:profit>=300000?["v-good","Strong margins"]:profit>0?["v-warn","Profitable, but thin"]:["v-bad","Costs eat the $1M"],
+        rows:[["Expenses to get there",usd(exp)],["Marketing to win them",m.cac?usd(mkt)+" ("+usd(m.cac)+" each)":"Financing, not ads"],["Profit you keep",usd(profit)]],
+        coach:(m.name==="Real estate"?"You'd need "+units+" doors earning "+usd(v)+" each. Most investors get there over years, one property at a time. ":"At "+usd(v)+" you need about "+Math.ceil(units/12).toLocaleString("en-US")+" new "+m.unit+" a month. ")+(isFinite(needProfit)?"To keep $1M after "+m.costNote+", you'd need about "+needProfit.toLocaleString("en-US")+".":"Raise your price first: each sale costs more than it earns."),
+        formula:m.unit+" needed = $1,000,000 ÷ price; expenses = "+(m.cogs*100)+"% cost of sales + "+usd(m.cac)+" to win each + "+usd(m.fixed)+" fixed (sample "+m.name.toLowerCase()+" model)"}}},
   runway:{ws:"B",q:"How long until my business runs out of cash?",label:"Income coming in each month",min:0,max:30000,step:500,val:0,fmt:usd,
     run(v){const cash=60000,exp=18000,burn=exp-v,m=burn>0?cash/burn:Infinity,d=new Date(2026,9+Math.floor(isFinite(m)?m:0),1);
       return{big:isFinite(m)?m.toFixed(1)+" months":"Cash is growing",sub:isFinite(m)?"of runway · cash lasts until about "+d.toLocaleString("en-US",{month:"short",year:"numeric"}):"income covers your $18,000 in monthly expenses",
@@ -516,9 +532,12 @@ const S={
         coach:gm>=.5?"At "+usd(v)+" you cover $6,000 in fixed costs after "+be+" sales. Test a small raise with new customers.":"Pricing near "+usd(target)+" gives you a 50% margin, so there's room for marketing and slow months.",
         formula:"margin = (price − cost) ÷ price; break-even = fixed costs ÷ (price − cost)"}}}
 };
-let cur="car",ai=true;
+let cur="car",ai=true,model=0;
+const cfg=s=>s.models?{...s,...s.models[model]}:s;
 function render(){
-  const s=S[cur],v=+$("pRange").value,o=s.run(v);
+  const s=cfg(S[cur]),v=+$("pRange").value,o=s.run(v,s);
+  $("pModels").hidden=!s.models;
+  if(s.models)$("pModels").innerHTML=s.models.map((m,i)=>`<button data-model="${i}" aria-pressed="${i===model}">${m.name}</button>`).join("");
   $("pQ").textContent=s.q;$("pBig").textContent=o.big;$("pSub").textContent=o.sub;
   $("pVerdict").className="verdict "+o.verdict[0];$("pVerdict").textContent=o.verdict[1];
   $("pRangeLabel").textContent=s.label;$("pRangeOut").textContent=s.fmt(v);
@@ -527,7 +546,7 @@ function render(){
   $("pCoachText").textContent=ai?o.coach:o.formula;
 }
 function pick(key){
-  cur=key;const s=S[key],r=$("pRange");
+  if(key!==cur)model=0;cur=key;const s=cfg(S[key]),r=$("pRange");
   r.min=s.min;r.max=s.max;r.step=s.step;r.value=s.val;
   document.querySelectorAll(".ask").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===key));
   $("wsP").setAttribute("aria-pressed",s.ws==="P");$("wsB").setAttribute("aria-pressed",s.ws==="B");
@@ -535,6 +554,7 @@ function pick(key){
 }
 $("asks").onclick=e=>{const b=e.target.closest(".ask");if(b)pick(b.dataset.s)};
 $("pRange").oninput=render;
+$("pModels").onclick=e=>{const b=e.target.closest("[data-model]");if(b){model=+b.dataset.model;pick(cur)}};
 $("wsP").onclick=()=>pick(S[cur].ws==="P"?cur:"car");
 $("wsB").onclick=()=>pick(S[cur].ws==="B"?cur:"scorp");
 function setAI(on){ai=on;["aiSwitch","aiSwitch2"].forEach(id=>$(id).setAttribute("aria-checked",on));$("aiLabel2").textContent=on?"AI Coach is on":"AI Coach is off. Scenarios still work.";render()}
