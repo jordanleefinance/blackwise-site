@@ -92,7 +92,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:col
 .seg{display:flex;background:var(--screen-line);border-radius:999px;padding:3px}
 .seg button{border:0;background:transparent;color:var(--screen-muted);font:700 .72rem var(--f-body);padding:5px 10px;border-radius:999px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--screen-ink);color:var(--screen)}
-.seg.models{align-self:flex-start;flex-wrap:wrap}
+select.models{width:100%;padding:7px 10px;border-radius:10px;border:1px solid var(--screen-line);background:var(--screen-line);color:var(--screen-ink);font:700 .8rem var(--f-body)}
 .q{font-family:var(--f-display);font-weight:700;font-size:1.25rem;line-height:1.15}
 .big{font:500 2.2rem var(--f-mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
 .sub{color:var(--screen-muted);font-size:.78rem}
@@ -235,7 +235,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
           </div>
         </div>
         <div class="q" id="pQ">Can I afford this car?</div>
-        <div class="seg models" id="pModels" role="group" aria-label="Business type" hidden></div>
+        <select class="models" id="pModels" aria-label="Business type" hidden></select>
         <div>
           <div class="big" id="pBig">$0</div>
           <div class="sub" id="pSub">per month</div>
@@ -457,16 +457,28 @@ const S={
         formula:"month by month: balance = balance × (1 + 5.5%/12) − payment, until balance ≤ 0"}}},
   million:{ws:"B",q:"How can I make my first $1 million?",
     models:[
-      {name:"Consulting",label:"Price per client / year",min:2000,max:50000,step:500,val:12000,unit:"clients",cogs:.10,cac:800,fixed:60000,costNote:"tools, insurance, admin"},
-      {name:"App",label:"Price per user / year",min:10,max:200,step:5,val:60,unit:"subscribers",cogs:.30,cac:25,fixed:150000,costNote:"developers, hosting, app store fees"},
-      {name:"Product",label:"Price per sale",min:10,max:300,step:5,val:45,unit:"sales",cogs:.40,cac:12,fixed:80000,costNote:"inventory, shipping, warehouse"},
-      {name:"Real estate",label:"Net rent per door / year",min:3000,max:20000,step:500,val:9000,unit:"rental doors",cogs:.35,cac:0,fixed:20000,costNote:"taxes, insurance, repairs, management"}],
+      {name:"Consulting",label:"Price per client / year",min:2000,max:50000,step:500,val:12000,unit:"clients",cogs:0.45,cac:1500,fixed:120000,costNote:"consultant pay, tools, insurance",typical:"15–30%"},
+      {name:"App or software",label:"Price per user / year",min:10,max:200,step:5,val:60,unit:"subscribers",cogs:0.3,cac:25,fixed:200000,costNote:"developers, hosting, app store fees",typical:"often negative early, 10–25% at scale"},
+      {name:"Online store",label:"Price per order",min:10,max:300,step:5,val:45,unit:"orders",cogs:0.55,cac:12,fixed:80000,costNote:"product, shipping, payment fees",typical:"5–15%"},
+      {name:"Real estate rentals",label:"Rent per door / year",min:6000,max:36000,step:500,val:18000,unit:"rental doors",cogs:0.8,cac:0,fixed:10000,costNote:"mortgage, taxes, insurance, repairs, vacancy",typical:"10–20% cash flow"},
+      {name:"Restaurant",label:"Average check per guest",min:8,max:80,step:1,val:22,unit:"guests",cogs:0.62,cac:1,fixed:250000,costNote:"food, staff, rent",typical:"3–9%"},
+      {name:"Food truck",label:"Average order",min:6,max:30,step:1,val:14,unit:"orders",cogs:0.7,cac:0.5,fixed:120000,costNote:"food, staff, fuel, permits",typical:"6–15%"},
+      {name:"Retail shop",label:"Average sale",min:10,max:200,step:5,val:40,unit:"sales",cogs:0.6,cac:3,fixed:250000,costNote:"inventory, staff, rent",typical:"2–10%"},
+      {name:"Marketing agency",label:"Retainer per client / year",min:6000,max:120000,step:1000,val:36000,unit:"clients",cogs:0.55,cac:2500,fixed:200000,costNote:"staff, software, office",typical:"10–20%"},
+      {name:"Online course or coaching",label:"Price per student",min:50,max:3000,step:25,val:500,unit:"students",cogs:0.08,cac:200,fixed:100000,costNote:"platform, ads, content",typical:"30–50%"},
+      {name:"Contractor or trades",label:"Average job",min:200,max:15000,step:100,val:3500,unit:"jobs",cogs:0.65,cac:150,fixed:150000,costNote:"materials, crew, trucks, licensing",typical:"10–20%"},
+      {name:"Cleaning service",label:"Price per client / year",min:1000,max:10000,step:100,val:3600,unit:"clients",cogs:0.65,cac:200,fixed:120000,costNote:"cleaners, supplies, insurance, vans",typical:"10–20%"},
+      {name:"Salon or barbershop",label:"Average visit",min:20,max:200,step:5,val:45,unit:"visits",cogs:0.55,cac:5,fixed:250000,costNote:"stylist commission, products, rent",typical:"8–15%"},
+      {name:"Gym or fitness studio",label:"Membership per year",min:300,max:3000,step:60,val:720,unit:"members",cogs:0.35,cac:60,fixed:400000,costNote:"trainers, equipment, rent",typical:"10–20%"},
+      {name:"Trucking",label:"Rate per load",min:800,max:6000,step:100,val:2500,unit:"loads",cogs:0.82,cac:50,fixed:100000,costNote:"fuel, drivers, maintenance, insurance, truck notes",typical:"2–6%"},
+      {name:"Childcare",label:"Tuition per child / year",min:6000,max:25000,step:500,val:12000,unit:"children",cogs:0.65,cac:150,fixed:220000,costNote:"teachers, licensing, building",typical:"5–15%"},
+      {name:"Photography or creative",label:"Price per project",min:200,max:8000,step:100,val:2000,unit:"projects",cogs:0.45,cac:200,fixed:120000,costNote:"second shooters, editing, gear, travel",typical:"20–35%"}],
     run(v,m){const units=Math.ceil(1e6/v),cogs=1e6*m.cogs,mkt=units*m.cac,exp=cogs+mkt+m.fixed,profit=1e6-exp,
       perSale=v*(1-m.cogs)-m.cac,needProfit=perSale>0?Math.ceil((1e6+m.fixed)/perSale):Infinity;
       return{big:units.toLocaleString("en-US")+" "+m.unit,sub:"to reach $1M in revenue in a year · "+Math.ceil(units/12).toLocaleString("en-US")+" a month",
-        verdict:profit>=300000?["v-good","Strong margins"]:profit>0?["v-warn","Profitable, but thin"]:["v-bad","Costs eat the $1M"],
+        verdict:profit>=200000?["v-good",Math.round(profit/1e4)+"% margin: strong"]:profit>0?["v-warn",Math.round(profit/1e4)+"% margin: thin"]:["v-bad","Costs eat the $1M"],
         rows:[["Expenses to get there",usd(exp)],["Marketing to win them",m.cac?usd(mkt)+" ("+usd(m.cac)+" each)":"Financing, not ads"],["Profit you keep",usd(profit)]],
-        coach:(m.name==="Real estate"?"You'd need "+units+" doors earning "+usd(v)+" each. Most investors get there over years, one property at a time. ":"At "+usd(v)+" you need about "+Math.ceil(units/12).toLocaleString("en-US")+" new "+m.unit+" a month. ")+(isFinite(needProfit)?"To keep $1M after "+m.costNote+", you'd need about "+needProfit.toLocaleString("en-US")+".":"Raise your price first: each sale costs more than it earns."),
+        coach:(m.name.startsWith("Real estate")?"You'd need "+units+" doors earning "+usd(v)+" each. Most investors get there over years, one property at a time. ":"At "+usd(v)+" you need about "+Math.ceil(units/12).toLocaleString("en-US")+" new "+m.unit+" a month. ")+(isFinite(needProfit)?"To keep $1M after "+m.costNote+", you'd need about "+needProfit.toLocaleString("en-US")+".":"Raise your price first: each sale costs more than it earns.")+" Typical margin for this type: "+m.typical+".",
         formula:m.unit+" needed = $1,000,000 ÷ price; expenses = "+(m.cogs*100)+"% cost of sales + "+usd(m.cac)+" to win each + "+usd(m.fixed)+" fixed (sample "+m.name.toLowerCase()+" model)"}}},
   runway:{ws:"B",q:"How long until my business runs out of cash?",label:"Income coming in each month",min:0,max:30000,step:500,val:0,fmt:usd,
     run(v){const cash=60000,exp=18000,burn=exp-v,m=burn>0?cash/burn:Infinity,d=new Date(2026,9+Math.floor(isFinite(m)?m:0),1);
@@ -537,7 +549,8 @@ const cfg=s=>s.models?{...s,...s.models[model]}:s;
 function render(){
   const s=cfg(S[cur]),v=+$("pRange").value,o=s.run(v,s);
   $("pModels").hidden=!s.models;
-  if(s.models)$("pModels").innerHTML=s.models.map((m,i)=>`<button data-model="${i}" aria-pressed="${i===model}">${m.name}</button>`).join("");
+  if(s.models&&$("pModels").dataset.for!==cur){$("pModels").innerHTML=s.models.map((m,i)=>`<option value="${i}">${m.name}</option>`).join("");$("pModels").dataset.for=cur}
+  if(s.models)$("pModels").value=model;
   $("pQ").textContent=s.q;$("pBig").textContent=o.big;$("pSub").textContent=o.sub;
   $("pVerdict").className="verdict "+o.verdict[0];$("pVerdict").textContent=o.verdict[1];
   $("pRangeLabel").textContent=s.label;$("pRangeOut").textContent=s.fmt(v);
@@ -554,9 +567,9 @@ function pick(key){
 }
 $("asks").onclick=e=>{const b=e.target.closest(".ask");if(b)pick(b.dataset.s)};
 $("pRange").oninput=render;
-$("pModels").onclick=e=>{const b=e.target.closest("[data-model]");if(b){model=+b.dataset.model;pick(cur)}};
+$("pModels").onchange=e=>{model=+e.target.value;pick(cur)};
 $("wsP").onclick=()=>pick(S[cur].ws==="P"?cur:"car");
-$("wsB").onclick=()=>pick(S[cur].ws==="B"?cur:"scorp");
+$("wsB").onclick=()=>pick(S[cur].ws==="B"?cur:"million");
 function setAI(on){ai=on;["aiSwitch","aiSwitch2"].forEach(id=>$(id).setAttribute("aria-checked",on));$("aiLabel2").textContent=on?"AI Coach is on":"AI Coach is off. Scenarios still work.";render()}
 $("aiSwitch").onclick=()=>setAI(!ai);$("aiSwitch2").onclick=()=>setAI(!ai);
 pick("car");
