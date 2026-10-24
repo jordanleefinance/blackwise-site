@@ -213,6 +213,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
           <button class="ask" data-s="cut">What do I need to cut to reach my investing goal?</button>
         </div>
         <div class="asks-group"><h3>Business</h3>
+          <button class="ask" data-s="runway">Is my business going to be okay? How long until I run out of cash?</button>
           <button class="ask" data-s="scorp">Should I elect S-corp?</button>
           <button class="ask" data-s="hire">Can I hire my first employee?</button>
           <button class="ask" data-s="compare">How does my business compare to others in my area?</button>
@@ -451,6 +452,13 @@ const S={
         rows:[["Total interest",usd(int)],["Months saved vs $350/mo",String(saved)],["Payoff time",(m/12).toFixed(1)+" years"]],
         coach:"Every extra $100 a month moves your date up. At "+usd(v)+" you finish "+saved+" months sooner than the minimum.",
         formula:"month by month: balance = balance × (1 + 5.5%/12) − payment, until balance ≤ 0"}}},
+  runway:{ws:"B",q:"How long until my business runs out of cash?",label:"Income coming in each month",min:0,max:30000,step:500,val:0,fmt:usd,
+    run(v){const cash=60000,exp=18000,burn=exp-v,m=burn>0?cash/burn:Infinity,d=new Date(2026,9+Math.floor(isFinite(m)?m:0),1);
+      return{big:isFinite(m)?m.toFixed(1)+" months":"Cash is growing",sub:isFinite(m)?"of runway · cash lasts until about "+d.toLocaleString("en-US",{month:"short",year:"numeric"}):"income covers your $18,000 in monthly expenses",
+        verdict:!isFinite(m)||m>=6?["v-good","You're going to be okay"]:m>=3?["v-warn","Plan your next 90 days"]:["v-bad","Act this month"],
+        rows:[["Cash in the bank",usd(cash)],["Monthly expenses",usd(exp)],["Net burn per month",burn>0?usd(burn):"$0"]],
+        coach:!isFinite(m)?"You're covering your costs. Anything above $18,000 a month adds to your cushion.":m>=6?"With "+usd(v)+" coming in you have "+m.toFixed(1)+" months of cash. That's a healthy cushion.":"With "+usd(v)+" coming in, cash runs out in "+m.toFixed(1)+" months. Cutting $3,000 in expenses or collecting overdue invoices buys about "+(cash/Math.max(burn-3000,1)-m).toFixed(1)+" more months.",
+        formula:"runway (months) = cash ÷ (monthly expenses − monthly income); sample: $60,000 cash, $18,000 expenses"}}},
   scorp:{ws:"B",q:"Should I elect S-corp?",label:"Net profit",min:30000,max:250000,step:5000,val:90000,fmt:usd,
     run(v){const salary=v*.6,se=.153*.9235*v,fica=.153*salary,cost=2500,save=se-fica-cost;
       return{big:usd(Math.max(save,0)),sub:"estimated yearly tax savings",
