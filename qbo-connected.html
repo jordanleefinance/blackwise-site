@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>QuickBooks Connection · BlackWise</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap">
+<link rel="stylesheet" href="/legal.css">
+</head>
+<body>
+<header><div class="wrap bar">
+  <a class="brand" href="/">Black<span class="wise">Wise</span></a>
+  <nav aria-label="Legal"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/">Home</a></nav>
+</div></header>
+
+<main class="wrap">
+<h1 id="title">QuickBooks is connected</h1>
+<p id="body">Your QuickBooks Online company is now connected to BlackWise. You can close this window and go back to the app. Your business dashboard will fill in after the first sync.</p>
+<p style="margin-top:28px"><a class="btn" href="/">Back to BlackWise</a></p>
+</main>
+
+<footer><div class="wrap">© 2026 JMM Group · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></div></footer>
+<script>
+// The API sends people here after Intuit's sign-in: ?status=connected|cancelled|expired
+const msgs = {
+  cancelled: ["QuickBooks wasn't connected", "The connection was cancelled, so nothing was shared. You can close this window and try again from the app whenever you're ready."],
+  expired: ["That link expired", "For your security, connection links only work for 10 minutes. Close this window and tap Connect QuickBooks in the app again."]
+};
+const m = msgs[new URLSearchParams(location.search).get("status")];
+if (m) { document.getElementById("title").textContent = m[0]; document.getElementById("body").textContent = m[1]; }
+</script>
+</body>
+</html>
