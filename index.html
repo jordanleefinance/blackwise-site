@@ -17,7 +17,7 @@
 :root{
   --bg:#F6F7F4; --surface:#FFFFFF; --ink:#0B0D0C; --muted:#5B6560; --line:#DDE3DE;
   --green:#0F7B4C; --green-soft:#E3F2EA; --red:#B3361F; --amber:#A86A00;
-  --phone:#0B0D0C; --screen:#111513; --screen-ink:#EEF3EF; --screen-muted:#8E9A93; --screen-line:#24302A; --screen-green:#34C17F;
+  --phone:#0B0D0C; --screen:#0B0F14; --screen-card:#151B23; --screen-ink:#F2F4F7; --screen-muted:#8A94A6; --screen-line:#232C38; --screen-green:#34C17F; --screen-accent:#1E9E63; --screen-red:#EB5757;
   --hero-bg:#0A0D0B; --hero-ink:#EEF3EF; --hero-muted:#9DAAA3; --hero-line:#1C2621;
   --f-display:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
   --f-body:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;
@@ -90,7 +90,52 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:col
 
 /* phone */
 .phone{width:min(340px,100%);margin:0 auto;aspect-ratio:9/19;max-width:100%;background:#1A211D;border-radius:44px;padding:11px;box-shadow:0 0 0 1px #2C3832,0 40px 80px -30px rgba(52,193,127,.25)}
-.screen{height:100%;border-radius:36px;background:var(--screen);color:var(--screen-ink);padding:18px 18px 16px;display:flex;flex-direction:column;gap:12px;overflow:hidden;font-size:.9rem}
+.screen{height:100%;border-radius:36px;background:var(--screen);color:var(--screen-ink);padding:18px 14px 0;display:flex;flex-direction:column;gap:10px;overflow:hidden;font-size:.9rem}
+.pane{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;overflow-y:auto;scrollbar-width:none;padding:0 2px 12px}
+.pane::-webkit-scrollbar{display:none}
+.pane[hidden]{display:none}
+.back{align-self:flex-start;border:0;background:none;color:var(--screen-green);font:700 .78rem var(--f-body);padding:0;cursor:pointer}
+/* dashboard, styled like the app's Overview */
+.mtog{display:flex;gap:6px}
+.mtog button{flex:1;border:1px solid var(--screen-line);background:transparent;color:var(--screen-muted);border-radius:999px;padding:6px 0;font:700 .8rem var(--f-body);cursor:pointer}
+.mtog button[aria-pressed="true"]{background:var(--screen-card);border-color:var(--screen-green);color:var(--screen-ink)}
+.mcard{background:var(--screen-card);border:1px solid var(--screen-line);border-radius:14px;padding:11px 12px;display:grid;gap:6px}
+.mcard.today{border-color:var(--screen-accent)}
+.meye{font-size:.62rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--screen-muted)}
+.mhead{font-weight:700;font-size:.86rem;line-height:1.3}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:.66rem;background:var(--screen);border-radius:10px;padding:2px 7px}
+.mnote{font-size:.66rem;color:var(--screen-muted);line-height:1.4}
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.box{background:var(--screen-card);border:1px solid var(--screen-line);border-radius:12px;padding:9px 10px;display:grid;gap:2px;min-width:0}
+.box span{font-size:.7rem;font-weight:600}
+.box b{font:700 1.05rem var(--f-body);font-variant-numeric:tabular-nums}
+.box small{font-size:.6rem;color:var(--screen-muted)}
+.track{height:4px;background:var(--screen-line);border-radius:2px;overflow:hidden;margin-top:3px}
+.track i{display:block;height:100%;background:var(--screen-green);border-radius:2px}
+.track i.over{background:var(--screen-red)}
+.cashc{background:#050807;border:1px solid var(--screen-line);border-radius:14px;padding:12px 10px 8px;text-align:center}
+.cashc .ce{color:var(--screen-green);font-weight:600;font-size:.8rem}
+.cashc .cb{font:700 1.7rem var(--f-body);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.cashc .cd{font-size:.7rem;font-weight:600;font-variant-numeric:tabular-nums}
+.cashc .cd span{color:var(--screen-muted);font-weight:400}
+.cashc svg{display:block;width:100%;height:110px;margin-top:8px;overflow:visible}
+.mcard.tap{cursor:pointer;text-align:left;font:inherit;color:inherit}
+.mcard.tap:hover{border-color:var(--screen-green)}
+.mval{font:700 1.3rem var(--f-body);font-variant-numeric:tabular-nums}
+.mtitle{display:flex;justify-content:space-between;font-weight:600;font-size:.8rem}
+.mtitle i{font-style:normal;color:var(--screen-muted)}
+.pills{display:flex;justify-content:space-between;margin-top:4px}
+.pills button{border:0;background:transparent;color:var(--screen-muted);font:700 .68rem var(--f-body);padding:4px 7px;border-radius:7px;cursor:pointer}
+.pills button[aria-pressed="true"]{background:rgba(52,193,127,.14);color:var(--screen-green)}
+.mline{display:flex;justify-content:space-between;gap:8px;font-size:.7rem;color:var(--screen-muted)}
+.mline b{font-weight:600;color:var(--screen-ink);font-variant-numeric:tabular-nums}
+.tabbar{display:flex;justify-content:space-around;border-top:1px solid var(--screen-line);margin:0 -14px;padding:7px 6px 14px;background:var(--screen)}
+.tabbar>*{display:grid;justify-items:center;gap:2px;border:0;background:none;color:var(--screen-muted);font:600 .56rem var(--f-body);padding:0;cursor:default}
+.tabbar button{cursor:pointer}
+.tabbar svg{width:18px;height:18px}
+.tabbar .on{color:var(--screen-green)}
+.phone-note{text-align:center;font:500 .7rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--hero-muted);margin-top:12px}
 .status{display:flex;justify-content:space-between;font:500 .72rem var(--f-mono);color:var(--screen-muted)}
 .apphead{display:flex;justify-content:space-between;align-items:center}
 .apphead .brand{font-size:1.05rem;color:var(--screen-ink)}
@@ -110,7 +155,7 @@ input[type=range]{width:100%;accent-color:#34C17F}
 .row b{font-family:var(--f-mono);font-weight:500;font-variant-numeric:tabular-nums}
 .verdict{display:inline-flex;align-self:flex-start;gap:6px;align-items:center;border-radius:999px;padding:4px 10px;font-weight:700;font-size:.75rem}
 .v-good{background:#173A28;color:#5FE0A0}.v-warn{background:#3A2E12;color:#F2C05A}.v-bad{background:#3D1A14;color:#FF8C73}
-.coach{margin-top:auto;background:var(--screen-line);border-radius:16px 16px 16px 4px;padding:10px 12px;font-size:.8rem;line-height:1.45}
+.coach{margin-top:auto;background:var(--screen-card);border-radius:16px 16px 16px 4px;padding:10px 12px;font-size:.8rem;line-height:1.45}
 .coach small{display:block;font:500 .65rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--screen-green);margin-bottom:3px}
 .ai{display:flex;align-items:center;justify-content:space-between;font-size:.75rem;color:var(--screen-muted)}
 .switch{position:relative;width:38px;height:22px;border-radius:999px;border:0;background:var(--screen-line);cursor:pointer}
@@ -118,7 +163,7 @@ input[type=range]{width:100%;accent-color:#34C17F}
 .switch[aria-checked="true"]{background:#1F6B47}.switch[aria-checked="true"]::after{left:19px;background:#fff}
 
 /* sections */
-section.band{padding-block:72px;border-top:1px solid var(--line)}
+section.band{padding-block:72px;border-top:1px solid var(--line);scroll-margin-top:64px}
 .sec-head{max-width:40em;margin-bottom:36px}
 .sec-head h2{font-size:clamp(1.9rem,3.6vw,2.8rem);font-weight:700;margin:10px 0 12px}
 .sec-head p{color:var(--muted);margin:0}
@@ -139,6 +184,16 @@ section.band{padding-block:72px;border-top:1px solid var(--line)}
 .toggle-demo{display:flex;align-items:center;gap:14px;margin-top:18px}
 .toggle-demo .switch{background:var(--line)}
 .toggle-demo .switch[aria-checked="true"]{background:var(--green)}
+
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 20px}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 0;font:700 1.05rem var(--f-display)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:500 1.3rem var(--f-mono);color:var(--green);flex:none}
+.faq details[open] summary::after{content:"−"}
+.faq details p,.faq details ul{color:var(--muted);margin:0 0 16px}
+.faq details ul{padding-left:18px}
+.faq details li+li{margin-top:4px}
 
 /* pricing */
 .price{font:500 2.2rem var(--f-mono);letter-spacing:-.03em;margin:10px 0 2px}
@@ -215,7 +270,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
         <div class="asks-group"><h3>Personal</h3>
           <button class="ask" data-s="okay">Am I going to be okay?</button>
           <button class="ask" data-s="friends">Can I go hang out with my friends?</button>
-          <button class="ask" data-s="car" aria-pressed="true">Can I afford this car?</button>
+          <button class="ask" data-s="car">Can I afford this car?</button>
           <button class="ask" data-s="loan">When will my student loans be gone?</button>
           <button class="ask" data-s="retire">How much should I save for retirement to lower my taxes?</button>
           <button class="ask" data-s="cut">What do I need to cut to reach my investing goal?</button>
@@ -231,7 +286,8 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
       </div>
     </div>
 
-    <div class="phone" aria-label="BlackWise app preview">
+    <div>
+    <div class="phone" aria-label="BlackWise app preview with sample numbers">
       <div class="screen">
         <div class="status"><span>9:41</span><span>●●● 5G</span></div>
         <div class="apphead">
@@ -241,21 +297,69 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
             <button id="wsB" aria-pressed="false">Business</button>
           </div>
         </div>
-        <div class="q" id="pQ">Can I afford this car?</div>
-        <select class="models" id="pModels" aria-label="Business type" hidden></select>
-        <div>
-          <div class="big" id="pBig">$0</div>
-          <div class="sub" id="pSub">per month</div>
+
+        <div class="pane" id="dashPane">
+          <div class="mtog" role="group" aria-label="Dashboard view">
+            <button id="mMine" aria-pressed="true">Personal</button>
+            <button id="mOurs" aria-pressed="false">Household</button>
+          </div>
+          <div class="mcard today">
+            <div class="meye" id="dEye">This afternoon · Friday</div>
+            <div class="mhead" id="dHead"></div>
+            <div class="chips" id="dChips"></div>
+          </div>
+          <div class="boxes" id="dBoxes"></div>
+          <div class="mnote" id="dBudgetNote"></div>
+          <div class="mcard" id="dCash"></div>
+          <div class="mcard" id="dExtra"></div>
         </div>
-        <span class="verdict v-good" id="pVerdict">Fits your plan</span>
-        <div class="slider">
-          <label for="pRange"><span id="pRangeLabel">Car price</span><output id="pRangeOut" for="pRange">$0</output></label>
-          <input type="range" id="pRange" min="10000" max="80000" step="1000" value="32000">
+
+        <div class="pane" id="cashPane" hidden>
+          <button class="back" data-back>‹ Dashboard</button>
+          <div class="cashc">
+            <div class="ce">Cash</div>
+            <div class="cb" id="cBig">$0</div>
+            <div class="cd" id="cDelta"></div>
+            <svg id="cChart" viewBox="0 0 280 110" preserveAspectRatio="none" aria-hidden="true"></svg>
+            <div class="pills" id="cPills" role="group" aria-label="Chart range">
+              <button data-r="1W" aria-pressed="false">1W</button><button data-r="1M" aria-pressed="true">1M</button><button data-r="3M" aria-pressed="false">3M</button><button data-r="1Y" aria-pressed="false">1Y</button><button data-r="ALL" aria-pressed="false">ALL</button>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mline"><b>Hometown Credit Union</b><b>$4,820</b></div>
+            <div class="mline"><span>Checking ••2231</span><b>$3,140</b></div>
+            <div class="mline"><span>Savings ••8810</span><b>$1,680</b></div>
+          </div>
         </div>
-        <div class="rows" id="pRows"></div>
-        <div class="coach" id="pCoach"><small>BlackWise Coach</small><span id="pCoachText"></span></div>
-        <div class="ai"><span>AI Coach</span><button class="switch" id="aiSwitch" role="switch" aria-checked="true" aria-label="AI Coach"></button></div>
+
+        <div class="pane" id="askPane" hidden>
+          <button class="back" data-back>‹ Dashboard</button>
+          <div class="q" id="pQ">Can I afford this car?</div>
+          <select class="models" id="pModels" aria-label="Business type" hidden></select>
+          <div>
+            <div class="big" id="pBig">$0</div>
+            <div class="sub" id="pSub">per month</div>
+          </div>
+          <span class="verdict v-good" id="pVerdict">Fits your plan</span>
+          <div class="slider">
+            <label for="pRange"><span id="pRangeLabel">Car price</span><output id="pRangeOut" for="pRange">$0</output></label>
+            <input type="range" id="pRange" min="10000" max="80000" step="1000" value="32000">
+          </div>
+          <div class="rows" id="pRows"></div>
+          <div class="coach" id="pCoach"><small>BlackWise Coach</small><span id="pCoachText"></span></div>
+          <div class="ai"><span>AI Coach</span><button class="switch" id="aiSwitch" role="switch" aria-checked="true" aria-label="AI Coach"></button></div>
+        </div>
+
+        <nav class="tabbar" aria-label="App tabs (preview)">
+          <button id="tabDash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Dashboard</button>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Invest</span>
+          <button id="tabCoach"><svg aria-hidden="true"><use href="#sankofa"/></svg>AI Coach</button>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Debt &amp; Tax</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Members</span>
+        </nav>
       </div>
+    </div>
+    <p class="phone-note">Sample numbers · tap around</p>
     </div>
   </div></section>
 
@@ -335,6 +439,52 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
           <p>Every AI answer comes with a "See what AI saw" view, and each workspace keeps a log of every AI request so owners can review it at any time. No black boxes.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="band" id="households">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Households</div>
+        <h2>Share money with someone, on your terms.</h2>
+        <p>Plan with a partner, roommate or anyone you share bills with. You decide what they see, one account at a time.</p>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>How does household sharing work?</summary>
+          <p>Open Household from your Personal dashboard and invite someone by email. They join with the code you send them, signed in with that email. Once they're in, you share "Our budget", a set of monthly limits for what you spend together, and your dashboard gets a Personal / Household switch. You can be in one household at a time and leave whenever you like.</p>
+        </details>
+        <details>
+          <summary>What stays private?</summary>
+          <ul>
+            <li>Every account starts private. Nothing is shared until you choose.</li>
+            <li>Your personal budget doesn't change. "Our budget" counts only the accounts you chose to share.</li>
+            <li>Business accounts are never shared through a household.</li>
+            <li>If you give an accountant or advisor access, they never see another household member's accounts through you.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Can I share only part of an account?</summary>
+          <p>Yes. For each account you pick Private, Balance only (they see the balance but not what you spend) or Shared (they see the balance and every transaction). For a bank account you share in full or as balance only, you can also count all of it, a percentage, or a set dollar amount each month toward the household. Your own Cash on hand then shows only your part. You can also mark a single transaction as household or personal.</p>
+        </details>
+        <details>
+          <summary>What can my household see on a shared account?</summary>
+          <p>The balance and its transactions, including who spent each one. Either of you can change a shared transaction's category, and those changes are kept in your activity history.</p>
+        </details>
+        <details>
+          <summary>How do shared goals work?</summary>
+          <p>Create a household goal, like a trip or a down payment, and pick the shared accounts that fund it. The household's part of each account counts toward the goal, and you can add money saved some other way. You'll both see the accounts and recent transactions behind it.</p>
+        </details>
+        <details>
+          <summary>How does "Who owes who" work?</summary>
+          <p>Record a dinner you covered, rent you split or money you collected for someone, and split a bill evenly across several people. It works with anyone, in your household or not. They see it in BlackWise when they sign in with that email, or once they sign up, and either of you can mark it paid. They see the amount and what it was for, never your bank details. No money moves through BlackWise: pay each other the way you already do.</p>
+        </details>
+        <details>
+          <summary>What happens if someone leaves?</summary>
+          <p>When you or another member leaves or is removed, access ends right away. Your accounts stop showing in the household, and your personal dashboard and budget stay exactly as they were.</p>
+        </details>
+      </div>
+      <p class="note" style="margin-top:18px">More detail is in our <a href="/privacy">Privacy Policy</a>.</p>
     </div>
   </section>
 
@@ -473,7 +623,7 @@ document.addEventListener("click",e=>{
 $("menuBtn").onclick=()=>{const o=$("mainNav").classList.toggle("open");$("menuBtn").setAttribute("aria-expanded",o)};
 const h=location.hash.slice(1);
 if(h==="privacy"||h==="terms") location.replace("/"+h); // old in-page links moved to their own pages
-h==="waitlist"?show("home","waitlist"):show(h||"home");
+h==="waitlist"||h==="households"?show("home",h):show(h||"home");
 
 /* ---------- live phone scenarios (sample numbers) ---------- */
 const pmt=(rate,n,pv)=>rate===0?pv/n:pv*rate/(1-Math.pow(1+rate,-n));
@@ -597,7 +747,68 @@ function render(){
   $("pCoach").querySelector("small").textContent=ai?"BlackWise Coach":"Formula";
   $("pCoachText").textContent=ai?o.coach:o.formula;
 }
+/* ---------- phone dashboard (sample numbers, laid out like the app's Dashboard tab) ---------- */
+const D={
+  mine:{today:["You have $31 for lunch today",[["Restaurants","$19"],["Groceries","$12"]]],
+    boxes:[["Groceries",212,500],["Restaurants",96,250],["Gas",64,160],["Fun money",-18,120]],
+    note:"Tap a box to see what you spent there this month.",
+    cash:`<div class="meye">Bank accounts</div><div class="mtitle">Cash on hand <i>›</i></div><div class="mval">$4,220</div>
+      <div class="mline"><span>Set aside for the household</span><b>+$600</b></div>
+      <div class="mline"><span>Checking ••2231</span><b>$3,140</b></div><div class="mline"><span>Savings ••8810</span><b>$1,680</b></div>`,
+    extra:`<div class="meye">Goals</div><div class="mtitle">Emergency fund</div><div class="mline"><span>$3,000 of $9,000</span><b>$250/mo</b></div><div class="track"><i style="width:33%"></i></div>`},
+  ours:{today:["You have $46 for lunch today",[["Restaurants","$28"],["Groceries","$18"]]],
+    boxes:[["Groceries",388,800],["Restaurants",140,300],["Utilities",65,260],["Home",120,200]],
+    note:"Counted only from accounts you both chose to share. Tap a box to see its transactions. Your personal budget is separate.",
+    cash:`<div class="meye">Household</div><div class="mtitle">Cash on hand</div><div class="mval">$6,450</div>
+      <div class="mline"><span>Joint checking ••4417 · You</span><b>$3,250</b></div>
+      <div class="mline"><span>Bills ••0921 · Sam</span><b>$2,600</b></div>
+      <div class="mline"><span>Savings ••8810 · You</span><b>$600</b></div>`,
+    extra:`<div class="mtitle">Household goals</div><div class="mnote">Save toward something together and see which accounts and transactions make it up.</div>`}
+};
+let dmode="mine",range="1M";
+function pane(id){["dashPane","askPane","cashPane"].forEach(p=>$(p).hidden=p!==id);
+  $("tabDash").classList.toggle("on",id!=="askPane");$("tabCoach").classList.toggle("on",id==="askPane");
+  if(id!=="askPane")document.querySelectorAll(".ask").forEach(b=>b.setAttribute("aria-pressed","false"))}
+function dash(m){
+  if(m)dmode=m;const d=D[dmode];
+  $("mMine").setAttribute("aria-pressed",dmode==="mine");$("mOurs").setAttribute("aria-pressed",dmode==="ours");
+  $("dHead").textContent=d.today[0];
+  $("dChips").innerHTML=d.today[1].map(c=>`<span class="chip">${c[0]} ${c[1]}</span>`).join("");
+  $("dBoxes").innerHTML=d.boxes.map(([l,left,lim])=>{const used=Math.min(100,Math.round((lim-left)/lim*100));
+    return `<div class="box"><span>${l}</span><b${left<0?' style="color:var(--screen-red)"':""}>${left<0?"−"+usd(-left):usd(left)}</b><small>${left<0?"over":"left"} of ${usd(lim)}</small><div class="track"><i class="${left<0?"over":""}" style="width:${used}%"></i></div></div>`}).join("");
+  $("dBudgetNote").textContent=d.note;
+  const c=$("dCash");c.innerHTML=d.cash;c.classList.toggle("tap",dmode==="mine");
+  if(dmode==="mine"){c.setAttribute("role","button");c.tabIndex=0;c.setAttribute("aria-label","Cash on hand, open the Cash graph")}
+  else{c.removeAttribute("role");c.removeAttribute("tabindex");c.removeAttribute("aria-label")}
+  $("dExtra").innerHTML=d.extra;
+}
+/* Cash graph: a seeded walk that ends at today's $4,820, one line per range */
+const RANGES={"1W":[8,"Past week",.012],"1M":[31,"Past month",.02],"3M":[46,"Past 3 months",.035],"1Y":[53,"Past year",.06],"ALL":[60,"All time",.07]};
+function walk(n,vol,seed){let x=seed,out=[4820];const rnd=()=>(x=(x*16807)%2147483647)/2147483647;
+  for(let i=1;i<n;i++)out.unshift(out[0]*(1+(rnd()-.56)*vol*2.2));return out}
+function chart(){
+  const [n,when,vol]=RANGES[range],pts=walk(n,vol,n*97+13),lo=Math.min(...pts),hi=Math.max(...pts),pad=(hi-lo||1)*.15,W=280,H=110;
+  const X=i=>i/(n-1)*W,Y=v=>(hi+pad-v)/(hi-lo+pad*2)*H,first=pts[0],last=pts[n-1],up=last>=first,col=up?"#34C17F":"#EB5757";
+  const line=pts.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)).join("");
+  $("cChart").innerHTML=`<defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".25"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    <line x1="0" x2="${W}" y1="${Y(first).toFixed(1)}" y2="${Y(first).toFixed(1)}" stroke="#8A94A6" stroke-opacity=".35" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"/>
+    <path d="${line}L${W} ${H}L0 ${H}Z" fill="url(#cg)"/>
+    <path d="${line}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`;
+  const dv=last-first;
+  $("cBig").textContent="$4,820";
+  $("cDelta").innerHTML=`<b style="color:${col}">${dv>=0?"+":"−"}${usd(Math.abs(dv))} (${(Math.abs(dv)/first*100).toFixed(1)}%)</b> <span>${when}</span>`;
+  document.querySelectorAll("#cPills button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r===range));
+}
+$("mMine").onclick=()=>dash("mine");$("mOurs").onclick=()=>dash("ours");
+$("dCash").onclick=()=>{if(dmode==="mine"){chart();pane("cashPane")}};
+$("dCash").onkeydown=e=>{if(dmode==="mine"&&(e.key==="Enter"||e.key===" ")){e.preventDefault();$("dCash").click()}};
+$("cPills").onclick=e=>{const b=e.target.closest("button");if(b){range=b.dataset.r;chart()}};
+document.querySelectorAll("[data-back]").forEach(b=>b.onclick=()=>{pane("dashPane");$("wsP").setAttribute("aria-pressed","true");$("wsB").setAttribute("aria-pressed","false")});
+$("tabDash").onclick=()=>document.querySelector("[data-back]").click();
+$("tabCoach").onclick=()=>pick(cur);
+
 function pick(key){
+  pane("askPane");
   if(key!==cur)model=0;cur=key;const s=cfg(S[key]),r=$("pRange");
   r.min=s.min;r.max=s.max;r.step=s.step;r.value=s.val;
   document.querySelectorAll(".ask").forEach(b=>b.setAttribute("aria-pressed",b.dataset.s===key));
@@ -607,11 +818,11 @@ function pick(key){
 $("asks").onclick=e=>{const b=e.target.closest(".ask");if(b)pick(b.dataset.s)};
 $("pRange").oninput=render;
 $("pModels").onchange=e=>{model=+e.target.value;pick(cur)};
-$("wsP").onclick=()=>pick(S[cur].ws==="P"?cur:"car");
+$("wsP").onclick=()=>document.querySelector("[data-back]").click();
 $("wsB").onclick=()=>pick(S[cur].ws==="B"?cur:"million");
 function setAI(on){ai=on;["aiSwitch","aiSwitch2"].forEach(id=>$(id).setAttribute("aria-checked",on));$("aiLabel2").textContent=on?"AI Coach is on":"AI Coach is off. Scenarios still work.";render()}
 $("aiSwitch").onclick=()=>setAI(!ai);$("aiSwitch2").onclick=()=>setAI(!ai);
-pick("car");
+render();dash("mine");pane("dashPane");
 
 /* ---------- pricing toggle ---------- */
 function bill(year){
