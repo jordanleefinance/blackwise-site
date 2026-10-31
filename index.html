@@ -135,6 +135,8 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:col
 .tabbar button{cursor:pointer}
 .tabbar svg{width:18px;height:18px}
 .tabbar .on{color:var(--screen-green)}
+.tabbar .soon{opacity:.45}
+.tabbar .soon small{font-size:.48rem;font-weight:500;letter-spacing:.02em;margin-top:-1px}
 .phone-note{text-align:center;font:500 .7rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--hero-muted);margin-top:12px}
 .status{display:flex;justify-content:space-between;font:500 .72rem var(--f-mono);color:var(--screen-muted)}
 .apphead{display:flex;justify-content:space-between;align-items:center}
@@ -352,10 +354,10 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
 
         <nav class="tabbar" aria-label="App tabs (preview)">
           <button id="tabDash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Dashboard</button>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Invest</span>
+          <span class="soon" title="Available in the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Invest<small>In the app</small></span>
           <button id="tabCoach"><svg aria-hidden="true"><use href="#sankofa"/></svg>AI Coach</button>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Debt &amp; Tax</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Members</span>
+          <span class="soon" title="Available in the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>Debt &amp; Tax<small>In the app</small></span>
+          <span class="soon" title="Available in the app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></svg>Members<small>In the app</small></span>
         </nav>
       </div>
     </div>
