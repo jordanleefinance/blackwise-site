@@ -303,7 +303,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
         <div class="pane" id="dashPane">
           <div class="mtog" role="group" aria-label="Dashboard view">
             <button id="mMine" aria-pressed="true">Personal</button>
-            <button id="mOurs" aria-pressed="false">Household</button>
+            <button id="mOurs" aria-pressed="false">Family</button>
           </div>
           <div class="mcard today">
             <div class="meye" id="dEye">This afternoon · Friday</div>
@@ -447,43 +447,43 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
   <section class="band" id="households">
     <div class="wrap">
       <div class="sec-head">
-        <div class="eyebrow">Households</div>
+        <div class="eyebrow">Families</div>
         <h2>Share money with someone, on your terms.</h2>
         <p>Plan with a partner, roommate or anyone you share bills with. You decide what they see, one account at a time.</p>
       </div>
       <div class="faq">
         <details>
-          <summary>How does household sharing work?</summary>
-          <p>Open Household from your Personal dashboard and invite someone by email. They join with the code you send them, signed in with that email. Once they're in, you share "Our budget", a set of monthly limits for what you spend together, and your dashboard gets a Personal / Household switch. You can be in one household at a time and leave whenever you like.</p>
+          <summary>How does family sharing work?</summary>
+          <p>Open Family from your Personal dashboard and invite someone by email. They join with the code you send them, signed in with that email. Once they're in, you share "Our budget", a set of monthly limits for what you spend together, and your dashboard gets a Personal / Family switch. You can be in one family at a time and leave whenever you like.</p>
         </details>
         <details>
           <summary>What stays private?</summary>
           <ul>
             <li>Every account starts private. Nothing is shared until you choose.</li>
             <li>Your personal budget doesn't change. "Our budget" counts only the accounts you chose to share.</li>
-            <li>Business accounts are never shared through a household.</li>
-            <li>If you give an accountant or advisor access, they never see another household member's accounts through you.</li>
+            <li>Business accounts are never shared through a family.</li>
+            <li>If you give an accountant or advisor access, they never see another family member's accounts through you.</li>
           </ul>
         </details>
         <details>
           <summary>Can I share only part of an account?</summary>
-          <p>Yes. For each account you pick Private, Balance only (they see the balance but not what you spend) or Shared (they see the balance and every transaction). For a bank account you share in full or as balance only, you can also count all of it, a percentage, or a set dollar amount each month toward the household. Your own Cash on hand then shows only your part. You can also mark a single transaction as household or personal.</p>
+          <p>Yes. For each account you pick Private, Balance only (they see the balance but not what you spend) or Shared (they see the balance and every transaction). For a bank account you share in full or as balance only, you can also count all of it, a percentage, or a set dollar amount each month toward the family. Your own Cash on hand then shows only your part. You can also mark a single transaction as family or personal.</p>
         </details>
         <details>
-          <summary>What can my household see on a shared account?</summary>
+          <summary>What can my family see on a shared account?</summary>
           <p>The balance and its transactions, including who spent each one. Either of you can change a shared transaction's category, and those changes are kept in your activity history.</p>
         </details>
         <details>
           <summary>How do shared goals work?</summary>
-          <p>Create a household goal, like a trip or a down payment, and pick the shared accounts that fund it. The household's part of each account counts toward the goal, and you can add money saved some other way. You'll both see the accounts and recent transactions behind it.</p>
+          <p>Create a family goal, like a trip or a down payment, and pick the shared accounts that fund it. The family's part of each account counts toward the goal, and you can add money saved some other way. You'll both see the accounts and recent transactions behind it.</p>
         </details>
         <details>
           <summary>How does "Who owes who" work?</summary>
-          <p>Record a dinner you covered, rent you split or money you collected for someone, and split a bill evenly across several people. It works with anyone, in your household or not. They see it in BlackWise when they sign in with that email, or once they sign up, and either of you can mark it paid. They see the amount and what it was for, never your bank details. No money moves through BlackWise: pay each other the way you already do.</p>
+          <p>Record a dinner you covered, rent you split or money you collected for someone, and split a bill evenly across several people. It works with anyone, in your family or not. They see it in BlackWise when they sign in with that email, or once they sign up, and either of you can mark it paid. They see the amount and what it was for, never your bank details. No money moves through BlackWise: pay each other the way you already do.</p>
         </details>
         <details>
           <summary>What happens if someone leaves?</summary>
-          <p>When you or another member leaves or is removed, access ends right away. Your accounts stop showing in the household, and your personal dashboard and budget stay exactly as they were.</p>
+          <p>When you or another member leaves or is removed, access ends right away. Your accounts stop showing in the family, and your personal dashboard and budget stay exactly as they were.</p>
         </details>
       </div>
       <p class="note" style="margin-top:18px">More detail is in our <a href="/privacy">Privacy Policy</a>.</p>
@@ -755,17 +755,17 @@ const D={
     boxes:[["Groceries",212,500],["Restaurants",96,250],["Gas",64,160],["Fun money",-18,120]],
     note:"Tap a box to see what you spent there this month.",
     cash:`<div class="meye">Bank accounts</div><div class="mtitle">Cash on hand <i>›</i></div><div class="mval">$4,220</div>
-      <div class="mline"><span>Set aside for the household</span><b>+$600</b></div>
+      <div class="mline"><span>Set aside for the family</span><b>+$600</b></div>
       <div class="mline"><span>Checking ••2231</span><b>$3,140</b></div><div class="mline"><span>Savings ••8810</span><b>$1,680</b></div>`,
     extra:`<div class="meye">Goals</div><div class="mtitle">Emergency fund</div><div class="mline"><span>$3,000 of $9,000</span><b>$250/mo</b></div><div class="track"><i style="width:33%"></i></div>`},
   ours:{today:["You have $46 for lunch today",[["Restaurants","$28"],["Groceries","$18"]]],
     boxes:[["Groceries",388,800],["Restaurants",140,300],["Utilities",65,260],["Home",120,200]],
     note:"Counted only from accounts you both chose to share. Tap a box to see its transactions. Your personal budget is separate.",
-    cash:`<div class="meye">Household</div><div class="mtitle">Cash on hand</div><div class="mval">$6,450</div>
+    cash:`<div class="meye">Family</div><div class="mtitle">Cash on hand</div><div class="mval">$6,450</div>
       <div class="mline"><span>Joint checking ••4417 · You</span><b>$3,250</b></div>
       <div class="mline"><span>Bills ••0921 · Sam</span><b>$2,600</b></div>
       <div class="mline"><span>Savings ••8810 · You</span><b>$600</b></div>`,
-    extra:`<div class="mtitle">Household goals</div><div class="mnote">Save toward something together and see which accounts and transactions make it up.</div>`}
+    extra:`<div class="mtitle">Family goals</div><div class="mnote">Save toward something together and see which accounts and transactions make it up.</div>`}
 };
 let dmode="mine",range="1M";
 function pane(id){["dashPane","askPane","cashPane"].forEach(p=>$(p).hidden=p!==id);
