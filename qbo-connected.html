@@ -22,9 +22,10 @@
 
 <footer><div class="wrap">© 2026 JMM Group · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></div></footer>
 <script>
-// The API sends people here after Intuit's sign-in: ?status=connected|cancelled|expired
+// The API sends people here after Intuit's sign-in: ?status=connected|cancelled|expired|wrong_company
 const msgs = {
   cancelled: ["QuickBooks wasn't connected", "The connection was cancelled, so nothing was shared. You can close this window and try again from the app whenever you're ready."],
+  wrong_company: ["That's a different QuickBooks company", "Signing back in only renews the company already linked to this workspace. Close this window and sign in with the QuickBooks login for that company, or ask the workspace owner to switch companies."],
   expired: ["That link expired", "For your security, connection links only work for 10 minutes. Close this window and tap Connect QuickBooks in the app again."]
 };
 const m = msgs[new URLSearchParams(location.search).get("status")];
