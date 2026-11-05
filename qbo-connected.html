@@ -16,8 +16,8 @@
 
 <main class="wrap">
 <h1 id="title">QuickBooks is connected</h1>
-<p id="body">Your QuickBooks Online company is now connected to BlackWise. You can close this window and go back to the app. Your business dashboard will fill in after the first sync.</p>
-<p style="margin-top:28px"><a class="btn" href="/">Back to BlackWise</a></p>
+<p id="body">Your QuickBooks Online company is now connected to BlackWise. Tap Back to BlackWise to return to the app. Your business dashboard will fill in after the first sync.</p>
+<p style="margin-top:28px"><a class="btn" id="back" href="/">Back to BlackWise</a></p>
 </main>
 
 <footer><div class="wrap">© 2026 JMM Group · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></div></footer>
@@ -28,8 +28,14 @@ const msgs = {
   wrong_company: ["That's a different QuickBooks company", "Signing back in only renews the company already linked to this workspace. Close this window and sign in with the QuickBooks login for that company, or ask the workspace owner to switch companies."],
   expired: ["That link expired", "For your security, connection links only work for 10 minutes. Close this window and tap Connect QuickBooks in the app again."]
 };
-const m = msgs[new URLSearchParams(location.search).get("status")];
+const status = new URLSearchParams(location.search).get("status");
+const m = msgs[status];
 if (m) { document.getElementById("title").textContent = m[0]; document.getElementById("body").textContent = m[1]; }
+// On a phone this page opens inside the app's sign-in window: send the button back into the app, which
+// closes the window. On a computer there's no app to open, so it stays the home page.
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
+  document.getElementById("back").href = "blackwise://qbo-done" + (status ? "?status=" + encodeURIComponent(status) : "");
+}
 </script>
 </body>
 </html>
