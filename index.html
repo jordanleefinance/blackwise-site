@@ -646,7 +646,7 @@ const S={
         rows:[["Total interest",usd(int)],["Months saved vs $350/mo",String(saved)],["Payoff time",(m/12).toFixed(1)+" years"]],
         coach:"Every extra $100 a month moves your date up. At "+usd(v)+" you finish "+saved+" months sooner than the minimum.",
         formula:"month by month: balance = balance × (1 + 5.5%/12) − payment, until balance ≤ 0"}}},
-  million:{ws:"B",q:"How can I make my first $1 million?",
+  million:{ws:"B",q:"How can I make my first $1 million?",fmt:usd,
     models:[
       {name:"Consulting",label:"Price per client / year",min:2000,max:50000,step:500,val:12000,unit:"clients",cogs:0.45,cac:1500,fixed:120000,costNote:"consultant pay, tools, insurance",typical:"15–30%"},
       {name:"App or software",label:"Price per user / year",min:10,max:200,step:5,val:60,unit:"subscribers",cogs:0.3,cac:25,fixed:200000,costNote:"developers, hosting, app store fees",typical:"often negative early, 10–25% at scale"},
