@@ -33,8 +33,16 @@ const m = msgs[status];
 if (m) { document.getElementById("title").textContent = m[0]; document.getElementById("body").textContent = m[1]; }
 // On a phone this page opens inside the app's sign-in window: send the button back into the app, which
 // closes the window. On a computer there's no app to open, so it stays the home page.
-if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
-  document.getElementById("back").href = "blackwise://qbo-done" + (status ? "?status=" + encodeURIComponent(status) : "");
+// On a computer, the web app (app.blackwiseai.com) opened this in its own window: the button closes it and
+// the app picks up from there. If the browser blocked that window, the app's tab came here itself: go back to it.
+const back = document.getElementById("back");
+if (window.opener) {
+  back.textContent = "Close this window";
+  back.addEventListener("click", e => { e.preventDefault(); window.close(); });
+} else if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
+  back.href = "blackwise://qbo-done" + (status ? "?status=" + encodeURIComponent(status) : "");
+} else {
+  back.href = "https://app.blackwiseai.com/connections";
 }
 </script>
 </body>
