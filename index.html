@@ -574,10 +574,10 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
     <div class="eyebrow" style="margin:28px 0 10px">For your business</div>
     <div class="grid3">
       <div class="panel feature"><div class="tag">Business Connect · keep QuickBooks</div><div class="price"><span data-p="business_connect" data-mo>$39</span> <small>/ business / mo</small></div><p>Your bank matched to QuickBooks with differences flagged, a month-end readiness score and a free seat for your accountant. Each extra business <span data-x="business_connect">$15</span> / mo.</p></div>
-      <div class="panel"><div class="tag">Business Books · BlackWise is your books</div><div class="price"><span data-p="business_books" data-mo>Coming soon</span> <small data-u hidden>/ mo</small></div><p>Replaces QuickBooks: the ledger, invoicing, bills, reports and 1099 tracking, for up to 3 users plus your accountant.<span data-xl="business_books" hidden> Each extra business <span data-x="business_books">$29</span> / mo.</span></p><p data-books-wait><a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
-      <div class="panel"><div class="tag">Books Pro · several businesses</div><div class="price"><span data-p="business_books_pro" data-mo>Coming soon</span> <small data-u hidden>/ mo</small></div><p>Everything in Business Books, plus classes, projects and consolidated reporting. Every business you own is included.</p><p data-books-wait><a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
+      <div class="panel"><div class="tag">Business Books · BlackWise is your books</div><div class="price"><span data-p="business_books" data-mo>$79</span> <small data-u>/ mo</small></div><p>Replaces QuickBooks: the ledger, invoicing, bills, reports and 1099 tracking, for up to 3 users plus your accountant.<span data-xl="business_books"> Each extra business <span data-x="business_books">$29</span> / mo.</span></p><p data-books-wait><strong>Coming soon.</strong> <a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
+      <div class="panel"><div class="tag">Books Pro · several businesses</div><div class="price"><span data-p="business_books_pro" data-mo>$119</span> <small data-u>/ mo</small></div><p>Everything in Business Books, plus classes, projects and consolidated reporting. Every business you own is included.</p><p data-books-wait><strong>Coming soon.</strong> <a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
     </div>
-    <p class="note" data-mo-note hidden style="margin-top:10px">Business plans are billed monthly.</p>
+    <p class="note" style="margin-top:10px">A larger business or a bigger team? <a href="mailto:info@blackwiseai.com?subject=BlackWise%20for%20a%20larger%20business">Contact the BlackWise team</a> for a custom plan.<span data-mo-note hidden> Business plans are billed monthly.</span></p>
     <p class="note" style="margin-top:18px">AI features are included on every paid plan and can always be turned off. Accountants invited by a client pay nothing. Founding members keep their price for life.</p>
   </div>
 </div>
@@ -863,7 +863,7 @@ render();dash("mine");pane("dashPane");
 /* ---------- pricing (from the app's plan catalog) ---------- */
 // Fallback until the server answers (same as the catalog's list prices, Books hidden).
 let price={trial_days:14,free_ai_monthly:20,books_available:false,plans:{personal:{monthly:8.99,annual:79},side_hustle:{monthly:17.99,annual:159},
-  business_connect:{monthly:39,annual:null,extra_entity:15},business_books:{monthly:null},business_books_pro:{monthly:null}}},year=false;
+  business_connect:{monthly:39,annual:null,extra_entity:15},business_books:{monthly:79,annual:null,extra_entity:29},business_books_pro:{monthly:119,annual:null}}},year=false;
 const money=n=>"$"+(Number.isInteger(n)?n:n.toFixed(2));
 function bill(y){
   year=y;$("bMonth").setAttribute("aria-pressed",!y);$("bYear").setAttribute("aria-pressed",y);
