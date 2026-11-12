@@ -557,7 +557,7 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
   <div class="wrap" style="padding-block:56px">
     <div class="sec-head">
       <div class="eyebrow">Pricing</div>
-      <h2>Free for you. Fair for your business.</h2>
+      <h2>Start free. Fair for your business.</h2>
       <p>Beta pricing. Founding members keep their price for life.</p>
     </div>
     <div class="bill" role="group" aria-label="Billing period">
@@ -565,19 +565,20 @@ footer{border-top:1px solid var(--line);padding-block:36px;color:var(--muted);fo
       <button id="bYear" aria-pressed="false">Annual</button>
     </div>
     <!-- Prices are filled from the app's plan catalog (GET /pricing); the numbers here are only the no-script fallback. -->
+    <div class="eyebrow" style="margin:6px 0 10px">For you</div>
     <div class="grid3">
+      <div class="panel"><div class="tag">Free</div><div class="price">$0</div><p>Budget, goals, debt payoff and net worth with your own numbers, plus <span data-ai>20</span> AI coach questions a month. No card needed.</p><p><a href="#waitlist" data-go="home" data-scroll="waitlist">Start free</a></p></div>
       <div class="panel"><div class="tag">Personal</div><div class="price"><span data-p="personal">$8.99</span> <small data-u>/ mo</small></div><p>Household budgeting with your banks linked, a shared budget, goals and net worth.</p></div>
       <div class="panel"><div class="tag">Side Hustle</div><div class="price"><span data-p="side_hustle">$17.99</span> <small data-u>/ mo</small></div><p>For freelancers, gig workers and 1099 earners: a separate business ledger, Schedule C categories and a quarterly tax set-aside. Try it free for <span data-trial>14</span> days.</p></div>
-      <div class="panel feature"><div class="tag">Business</div>
-        <div class="bill" role="group" aria-label="Your books" style="margin-bottom:10px">
-          <button id="bQbo" aria-pressed="true">I use QuickBooks</button>
-          <button id="bBooks" aria-pressed="false">BlackWise is my books</button>
-        </div>
-        <div id="bizConnect"><div class="price"><span data-p="business_connect">$39</span> <small>/ business / mo</small></div><p>Keeps QuickBooks: your bank matched to QuickBooks with differences flagged, a month-end readiness score and a free seat for your accountant. Each extra business <span data-x="business_connect">$15</span> / mo.</p></div>
-        <div id="bizBooks" hidden><div class="price" data-books-price><span data-p="business_books">Coming soon</span> <small data-u hidden>/ mo</small></div><p>Replaces QuickBooks: the ledger, invoicing, bills, reports and 1099 tracking, for up to 3 users plus your accountant. Books Pro adds classes, projects and consolidated reporting across every business.</p><p data-books-wait><a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
-      </div>
     </div>
-    <p class="note" style="margin-top:18px"><a href="#waitlist" data-go="home" data-scroll="waitlist">Start free</a>: budget, goals and debt plans with your own numbers. AI features are included on every paid plan and can always be turned off. Accountants invited by a client pay nothing. Founding members keep their price for life.</p>
+    <div class="eyebrow" style="margin:28px 0 10px">For your business</div>
+    <div class="grid3">
+      <div class="panel feature"><div class="tag">Business Connect · keep QuickBooks</div><div class="price"><span data-p="business_connect" data-mo>$39</span> <small>/ business / mo</small></div><p>Your bank matched to QuickBooks with differences flagged, a month-end readiness score and a free seat for your accountant. Each extra business <span data-x="business_connect">$15</span> / mo.</p></div>
+      <div class="panel"><div class="tag">Business Books · BlackWise is your books</div><div class="price"><span data-p="business_books" data-mo>Coming soon</span> <small data-u hidden>/ mo</small></div><p>Replaces QuickBooks: the ledger, invoicing, bills, reports and 1099 tracking, for up to 3 users plus your accountant.<span data-xl="business_books" hidden> Each extra business <span data-x="business_books">$29</span> / mo.</span></p><p data-books-wait><a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
+      <div class="panel"><div class="tag">Books Pro · several businesses</div><div class="price"><span data-p="business_books_pro" data-mo>Coming soon</span> <small data-u hidden>/ mo</small></div><p>Everything in Business Books, plus classes, projects and consolidated reporting. Every business you own is included.</p><p data-books-wait><a href="#waitlist" data-go="home" data-scroll="waitlist">Join the Books waitlist</a></p></div>
+    </div>
+    <p class="note" data-mo-note hidden style="margin-top:10px">Business plans are billed monthly.</p>
+    <p class="note" style="margin-top:18px">AI features are included on every paid plan and can always be turned off. Accountants invited by a client pay nothing. Founding members keep their price for life.</p>
   </div>
 </div>
 
@@ -860,22 +861,25 @@ $("aiSwitch").onclick=()=>setAI(!ai);$("aiSwitch2").onclick=()=>setAI(!ai);
 render();dash("mine");pane("dashPane");
 
 /* ---------- pricing (from the app's plan catalog) ---------- */
-let price=null,year=false;
+// Fallback until the server answers (same as the catalog's list prices, Books hidden).
+let price={trial_days:14,free_ai_monthly:20,books_available:false,plans:{personal:{monthly:8.99,annual:79},side_hustle:{monthly:17.99,annual:159},
+  business_connect:{monthly:39,annual:null,extra_entity:15},business_books:{monthly:null},business_books_pro:{monthly:null}}},year=false;
 const money=n=>"$"+(Number.isInteger(n)?n:n.toFixed(2));
 function bill(y){
   year=y;$("bMonth").setAttribute("aria-pressed",!y);$("bYear").setAttribute("aria-pressed",y);
+  document.querySelectorAll("[data-mo-note]").forEach(el=>el.hidden=!y);
   if(!price)return;
   document.querySelectorAll("[data-p]").forEach(el=>{const p=price.plans[el.dataset.p];if(!p)return;
     const u=el.parentNode.querySelector("[data-u]");if(u)u.hidden=p.monthly==null;
     if(p.monthly==null){el.textContent="Coming soon";return}
-    const yr=y&&p.annual!=null;el.textContent=money(yr?p.annual:p.monthly);if(u)u.textContent=yr?"/ yr":"/ mo"});
+    const yr=y&&p.annual!=null&&!("mo" in el.dataset);el.textContent=money(yr?p.annual:p.monthly);if(u)u.textContent=yr?"/ yr":"/ mo"});
   document.querySelectorAll("[data-x]").forEach(el=>{const p=price.plans[el.dataset.x];if(p&&p.extra_entity!=null)el.textContent=money(p.extra_entity)});
+  document.querySelectorAll("[data-xl]").forEach(el=>{const p=price.plans[el.dataset.xl];el.hidden=!p||p.extra_entity==null});
   document.querySelectorAll("[data-trial]").forEach(el=>el.textContent=price.trial_days);
+  document.querySelectorAll("[data-ai]").forEach(el=>el.textContent=price.free_ai_monthly);
   document.querySelectorAll("[data-books-wait]").forEach(el=>el.hidden=!!price.books_available);
 }
-function biz(books){$("bQbo").setAttribute("aria-pressed",!books);$("bBooks").setAttribute("aria-pressed",books);$("bizConnect").hidden=books;$("bizBooks").hidden=!books}
 $("bMonth").onclick=()=>bill(false);$("bYear").onclick=()=>bill(true);
-$("bQbo").onclick=()=>biz(false);$("bBooks").onclick=()=>biz(true);
 fetch("https://api.blackwiseai.com/pricing").then(r=>r.ok?r.json():null).then(p=>{if(p&&p.plans){price=p;bill(year)}}).catch(()=>{});
 
 /* ---------- Supabase (same project as the app) ---------- */
